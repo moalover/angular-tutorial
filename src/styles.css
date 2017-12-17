@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Anton');
+
+body {
+    background-color: #d6d6d6 !important;
+}
+
+.hero-entry {
+    background-color: #000000;
+    color: #ffffff;
+    height: 350px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 15px solid #ffffff;
+    margin-bottom: 20px;
+    background-position: center;
+    background-size: cover;
+    display: block;
+}
+
+.hero-entry > img {
+    display: block;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.hero-entry > a {
+    text-decoration: none;
+    color: #ffffff;
+    text-align: center;
+    display: block;
+    font-size: 20px; 
+    font-family: 'Anton', sans-serif;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.paginator {
+    font-size: 20px;
+    text-align: center;
+    background-color: rgba(255,255,255,0.5);
+    margin-bottom: 25px;
+}
+
+.paginator .paginator-prev {
+    float: left;
+}
+
+.paginator .paginator-next {
+    float: right;
+}
+
+.heroe-profile img{
+    width: 100%;
+}
+
+.heroe-profile .goback{
+    float:left;
+}
