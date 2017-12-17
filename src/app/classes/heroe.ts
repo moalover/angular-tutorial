@@ -5,6 +5,7 @@ export class Heroe {
         public description: string,
         public modified: Date,
         public thumbnail: Object,
-        public resourceURI: string
+        public resourceURI: string,
+        public teamColor: string
     ) {}
 }

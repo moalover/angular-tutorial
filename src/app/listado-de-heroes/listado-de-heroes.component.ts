@@ -65,8 +65,12 @@ export class ListadoDeHeroesComponent implements OnInit {
     ));
 
      */
-    this.spinner.toggle_spinner();
+    //this.spinner.toggle_spinner();
+
     this.heroesService.getHeroes();
+
+    
+
   }
 
 }

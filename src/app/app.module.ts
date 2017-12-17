@@ -9,13 +9,15 @@ import { ListadoDeHeroesComponent } from './listado-de-heroes/listado-de-heroes.
 import { HeroesService } from './heroes.service';
 import { HeroProfileComponent } from './hero-profile/hero-profile.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ModalPollComponent } from './modal-poll/modal-poll.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListadoDeHeroesComponent,
     HeroProfileComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ModalPollComponent
   ],
   imports: [
     BrowserModule,

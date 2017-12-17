@@ -1,37 +1,13 @@
 .spinner-background{
+    background-image: url(/assets/img/loading_img.jpg);
+    background-repeat: round;
     height: 100%;
     width: 100%;
     overflow: hidden;            
     margin: 0;
     padding: 0;
-    
     position: fixed;
     top: 0;
     left: 0;
     z-index: 12345;
-}
-
-.spinner,
-.spinner>div {
-    position: relative;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.spinner {
-    display: block;
-    font-size: 0;
-    color: white;
-    margin: auto;
-    position: absolute;
-    top: -30px; left: 0; bottom: 0; right: 0;
-}
-.spinner.la-dark {
-    color: #333;
-}
-.spinner>div {
-    display: inline-block;
-    float: none;
-    background-color: currentColor;
-    border: 0 solid currentColor;
 }
