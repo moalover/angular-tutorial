@@ -1,0 +1,37 @@
+<div class="page-modal" *ngIf="show_modal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Title -->
+          <div *ngIf="title_modal!=''" class="modal-header">
+              <button type="button" class="close" (click)="toggle_modal()" aria-hidden="true">
+                  &times;
+              </button>
+              <h4 class="modal-title">{{title_modal}}</h4>
+          </div>
+          <!-- Content -->
+          <div class="modal-body bg-white">
+              <div class="width-100">
+                  <div class="no-margin">
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 red-row"></div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 blue-row"></div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 yellow-row"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-blue to_the_left" [ngClass]="{'selected': team_selected=='azul'}" (click)="send_team('azul')">Azul</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-violet" [ngClass]="{'selected': team_selected=='violeta'}" (click)="send_team('violeta')">Violeta</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-orange to_the_left" [ngClass]="{'selected': team_selected=='naranjo'}" (click)="send_team('naranjo')">Naranjo</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-green" [ngClass]="{'selected': team_selected=='verde'}" (click)="send_team('verde')">Verde</div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
