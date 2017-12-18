@@ -62,7 +62,7 @@ Supóngase que queremos crear un nuevo proyecto llamado *"BechMarvel"*:
 
 Pero, ¿que está pasando cuando ejecutamos este comando?:
 
-- Un nuevo directorio llamado "AccenTest" es creado.
+- Un nuevo directorio llamado "BechMarvel" es creado.
 - Todo los archivos del source de tu aplicación son creados, basándose en el nombre ("BechMarvel" en este caso) y siguiendo las buenas prácticas oficiales de Angular.
 - Las dependencias son instaladas (usando NPM).
 - Se configura TypeScript.
@@ -112,7 +112,7 @@ export class ListadoDeHeroesComponent implements OnInit {
 
 Aquí vale la pena darle especial atención a la propiedad *"selector"* que contiene un selector al estilo de CSS, y es esto lo que va a utilizar Angular para incluir nuestro modulo en nuestra aplicación.
 
-Lo veremos con un ejemplo, vamos a editar el template (HTML) de nuestro componente principal que se encuentra en `src/app/listado-de-heroes/listado-de-heroes.component.html`, de forma que se vea así:
+Lo veremos con un ejemplo, vamos a editar el template (HTML) de nuestro componente principal que se encuentra en `src/app/app.component.html`, de forma que se vea así:
 
 ```
 <app-listado-de-heroes></app-listado-de-heroes>
@@ -205,7 +205,7 @@ Vamos a editar el template de nuestro componente ListadoDeHeroes, en `src/app/li
 Vamos a instalar el paquete de bootstrap mediante _npm_:
 
 ```
-> npm install –s bootstrap
+> npm install --save bootstrap
 ```
 
 Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_modules/bootstrap/dist/css/bootstrap.min.css`, ahora solo tenemos que configurar Angular CLI para que incluya este archivo de forma automática en nuestra aplicación, para esto editamos el archivo `.angular-cli.json` en la raiz de nuestra aplicación:
@@ -214,7 +214,7 @@ Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_m
 …
 "styles": [
 	"styles.css", 
-	"../node_modules/bootstrap/dist/css/bootstrap.min.css“
+	"../node_modules/bootstrap/dist/css/bootstrap.min.css"
 ],
 …
 ```
@@ -230,7 +230,7 @@ Una de las ventajas de desarrollar con _TypeScript_ es que aplicar conceptos de 
 Ahora vamos a generar una clase llamada Heroe usando Angular CLI:
 
 ```
-> ng g /classes/Heroe
+> ng g class /classes/Heroe
 ```
 
 Este comando nos va a generar el archivo `src/app/classes/heroe.ts`. El que vamos a editar a continuación para agregar nuevos atributos:

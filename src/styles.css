@@ -25,7 +25,7 @@ body {
     margin-right: auto; 
 }
 
-.hero-entry > a {
+.hero-entry > span {
     text-decoration: none;
     color: #ffffff;
     text-align: center;
