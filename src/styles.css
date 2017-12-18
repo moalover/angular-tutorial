@@ -5,6 +5,19 @@ body {
     background-color: #d6d6d6 !important;
     background-image: url(http://i.imgur.com/dTjnnHe.jpg);
     background-size: cover;
+    background-blend-mode: darken;
+}
+
+app-hero-profile > a {
+    background-color: #003aff;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 20px;
+    border: 1px solid #ffffff;
+    position: absolute;
+    top: 20px;
+    left: 31px;
+    transform: rotate(8deg);
 }
 
 h1 {
@@ -48,16 +61,28 @@ h1 {
 .paginator {
     font-size: 20px;
     text-align: center;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,1);
     margin-bottom: 25px;
 }
 
 .paginator .paginator-prev {
     float: left;
+    background-color: #003aff;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 20px;
+    border: 1px solid #ffffff;
+    transform: rotate(8deg);
 }
 
 .paginator .paginator-next {
     float: right;
+    background-color: #ff0000;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 20px;
+    border: 1px solid #ffffff;
+    transform: rotate(8deg);
 }
 
 .heroe-profile h3, .heroe-profile p, .heroe-profile span.modified {
