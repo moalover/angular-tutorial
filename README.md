@@ -531,7 +531,7 @@ Por último vamos a editar el template del componente _ListadoDeHeroes_ para agr
 
 ## 13 - Perfil de héroe
 
-Finalmente nuestra aplicación tiene lo escencial para consultar y listar héroes de forma amigable y efectiva. El próximo paso es poder seleccionar un héroe de la lista y ver más detalles del mismo. Para esto vamos a generar un nuevo componente usando _Angular CLI_:
+Finalmente nuestra aplicación tiene lo esencial para consultar y listar héroes de forma amigable y efectiva. El próximo paso es poder seleccionar un héroe de la lista y ver más detalles del mismo. Para esto vamos a generar un nuevo componente usando _Angular CLI_:
 
 ```
 > ng g component HeroProfile
@@ -666,4 +666,158 @@ ng-container *ngIf="heroe">
     <h1 class="text-center">{{heroe.name}}</h1>
     <a class="goback" (click)="goBack()">Atrás</a>
     ...
+```
+## 14 - Clasificar a un héroe (Invocando un componente dentro de otro)
+
+Añadiremos una funcionalidad más: poder ingresar a un héroe a un determinado equipo, caracterizado por un color. Para ello, nos valdremos de un componente más, un modal que nos muestre las categorías disponibles de Equipos y la posibilidad de agregar el héroe seleccionado a dicho equipo. Este modal, será inyectado desde el componente del Profile del Héroe y se podrá acceder a él mediante un botón.
+
+Por tanto, lo primero que realizaremos será crear otro componente denominado modal-poll con ng cli:
+
+```
+> ng g component modal-poll
+```
+
+Llenaremos la clase del componente recién creada con los siguientes imports y el atributo show_modal, que nos permitirá controlar cuando se mostrará el modal en `src/app/modal-poll/modal-poll.component.ts`
+
+```
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+
+@Component({
+  selector: 'modal-poll',
+  templateUrl: './modal-poll.component.html',
+  styleUrls: ['./modal-poll.component.css']
+})
+export class ModalPollComponent implements OnInit {
+  public show_modal: boolean = false;
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  toggle_modal(): void {
+    this.show_modal = !this.show_modal;
+  }
+
+}
+```
+
+Ahora le daremos la estructura a nuestro modal, para ello editamos `src/app/modal-poll/modal-poll.component.html` y copiamos el siguiente código html:
+
+```
+<div class="page-modal" *ngIf="show_modal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Title -->
+          <div *ngIf="title_modal!=''" class="modal-header">
+              <button type="button" class="close" (click)="toggle_modal()" aria-hidden="true">
+                  &times;
+              </button>
+              <h4 class="modal-title">Soy un modal</h4>
+          </div>
+          <!-- Content -->
+          <div class="modal-body bg-white">
+              <div class="width-100">
+                  <div class="no-margin">
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 red-row"></div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 blue-row"></div>
+                      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 yellow-row"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-blue to_the_left">Azul</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-violet">Violeta</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-orange to_the_left">Naranjo</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-green">Verde</div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+```
+
+Nótese que el tag que engloba todo el componente tiene una directiva de estructura *ngIf, que renderiza el elemento que la contiene sí y sólo sí se cumple la expresión que encierran sus comillas, en este caso nuestra expresión es una variale booleana.
+```
+*ngIf="show_modal"
+```
+
+Adicionalmente, se asocia la función que creamos en el archivo .ts que hará toggle de nuestro modal:
+```
+(click)="toggle_modal()"
+```
+Para poder comprobar que nuestro modal funciona, vamos a asociarle un url para acceder a él. Para esto, primero cambiamos su visibilidad asignando true a la variable show_modal en `src/app/modal-poll/modal-poll.component.ts`:
+```
+  public show_modal: boolean = true;
+```
+Luego, la ruta la agregamos en `src/app/app-routing.module.ts` de esta forma: 
+```
+....
+import { ModalPollComponent } from './modal-poll/modal-poll.component';
+....
+{ path: 'modal-poll', component: ModalPollComponent},
+.....
+```
+De esta forma, al acceder a `http://localhost:4200/modal-poll`,podremos ver el modal que creamos.
+
+Ya que comprobamos la creación de nuestro nuevo componente, sigamos con nuestro objetivo: conectar este componente con el resto de la aplicación.
+
+Primero, debemos editar `src/app/modal-poll/modal-poll.component.ts` y agregarle un atributo a nuestra clase que permita cambiar el nombre del modal. Pero haremos esta asignación de nombre desde el componente padre. Aquí introduciremos el decorador @Input, que permite instanciar variables de un componente en otro. 
+```
+    @Input() public title_modal : string;
+```
+Esta línea de código en esencia, lo que permite es que esa variable sea instanciada desde cualquier lugar de la aplicación.
+
+Posteriormente, en el componente padre, se deben realizar algunas cosas para reconocer a este componente hijo que se pretende incluir.
+
+Agregamos la ruta del componente hijo(modal-poll) en el componente padre(hero-profile). Así que abrimos el archivo `src/app/hero-profile/hero-profile.component.ts`, agregamos el import del componente hijo y declaramos una variable que servirá para instanciar el título del modal en el componente hijo:
+```
+...
+import { ModalPollComponent } from '../modal-poll/modal-poll.component';
+...
+
+public question_modal: string;
+
+..
+```
+Adicionalmente, debemos agregar el selector html o tag html que identifica al componente hijo dentro del componente padre, así como también, el atributo que deseamos llenar desde el componente padre *title_modal* es el nombre con el que se definió el atributo en el componente hijo, mientras que question_modal es el nombre con el que se declaró en el componente padre. Por tanto, en el archivo `src/app/hero-profile/hero-profile.component.html` agregamos lo siguiente:
+```
+<modal-poll [title_modal]="question_modal"></modal-poll>
+```
+
+Ya tenemos listas las asociaciones, pero nos hace falta un evento para disparar o invocar al componente del modal. Para ello, primero definimos una variable de template local sobre el tag html del componente hijo, en el archivo `src/app/hero-profile/hero-profile.component.html`, de esta forma: 
+
+```
+<modal-poll [title_modal]="question_modal" #modal></modal-poll>
+```
+Y en el archivo `src/app/hero-profile/hero-profile.component.ts`, declaramos lo siguiente: 
+```
+....
+import { Component, OnInit, ViewChild } from '@angular/core';
+...
+@ViewChild('modal') modal;
+....
+```
+Este decorador, permite manipular el objeto DOM asociado al selector que tiene entre paréntesis. El segundo nombre es por el cual será llamado en la clase del componente padre. Al hacer esa última línea, ya podremos utilizar todas las funciones asociadas al componente modal desde el componente padre.
+
+Lo último que nos falta es invocar nuestro componente hijo, desde el componente padre. Lo haremos a través del evento click asociado a un botón en la interfaz del componente padre, que a su vez ejecutará la función launchModal(). Esta función realizará dos cosas: Instanciará el título del modal y lo hará visible, para ello, añadimos las siguientes líneas de código al archivo `src/app/hero-profile/hero-profile.component.ts`:
+
+```
+....
+launchModal():void{
+    this.question_modal="¿En cual grupo quieres colocar a tu súper héroe?";
+    this.modal.toggle_modal();
+  }
+  ....
+```
+Y las siguientes líneas de código en `src/app/hero-profile/hero-profile.component.html`:
+```
+<p><button type="button" class="btn btn-primary" (click)="launchModal()">Clasificar</button></p>
 ```

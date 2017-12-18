@@ -52,14 +52,15 @@ importó bien la librería.
     14.1._ Se crea el componente desde cónsola, con ngcli
     ng g component modal-poll
     14.2._ Se crea el html(quitando pasos posteriores y agregando css)
-    14.3._ Se agrega como ruta a nuestra app para poder visualizar que está bien creada.
-    14.4._ Se agrega la propiedad (en true) y la función
+    14.3._ Se agrega la propiedad (en true) y la función
     que permitirá mostrar o no el modal. -> Se hace la prueba.
+    14.4._ Se agrega como ruta a nuestra app para poder visualizar que está bien creada.
     14.5._ Se agrega la propiedad input que será llenada por el componente padre.
     @Input() public title_modal : string;
     14.6._Se importa el componente hijo en el componente padre:
         14.6.1._ Se agrega la ruta del componente hijo en el componente padre.
         14.6.2._ Se agrega el tag del componente hijo en el componente padre.
+        
     14.7._ Se hace el binding entre los componentes:
         14.7.1._ Se crea el atributo que va a ser llenado desde el componente padre y se 
         hace la asignación desde el tag.
