@@ -65,7 +65,6 @@ export class HeroesService {
     else{
       return "";
     }
-    
   }
 
 }

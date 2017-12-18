@@ -9,7 +9,7 @@ export class ModalPollComponent implements OnInit {
   public show_modal: boolean = false;
   @Input() public title_modal : string;
   @Input() public team_selected : string;
-  @Output() setTeam = new EventEmitter<string>();
+  @Output() setTeam:EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 
