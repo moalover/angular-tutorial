@@ -16,7 +16,7 @@ export class HeroProfileComponent implements OnInit {
   private id;
   public heroe: Heroe;
   public question_modal: string;
-  team:string = "";
+  public team:string = "";
 
   constructor(private route: ActivatedRoute, private heroesService: HeroesService, private _location: Location) { }
 
@@ -39,7 +39,7 @@ export class HeroProfileComponent implements OnInit {
   }
 
   getTeam(team):void{
-    console.log("COlor: "+team);
+    console.log("Color: "+team);
     this.team = team;
     this.heroesService.teams.set(this.heroe.id, this.team);
   }

@@ -677,7 +677,7 @@ Por tanto, lo primero que realizaremos será crear otro componente denominado mo
 > ng g component modal-poll
 ```
 
-Llenaremos la clase del componente recién creada con los siguientes imports y el atributo show_modal, que nos permitirá controlar cuando se mostrará el modal en `src/app/modal-poll/modal-poll.component.ts`
+Llenaremos la clase del componente recién creada con los siguientes imports que ocuparemos posteriormente y el atributo show_modal, que nos permitirá controlar cuando se mostrará el modal en `src/app/modal-poll/modal-poll.component.ts`
 
 ```
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
@@ -821,3 +821,55 @@ Y las siguientes líneas de código en `src/app/hero-profile/hero-profile.compon
 ```
 <p><button type="button" class="btn btn-primary" (click)="launchModal()">Clasificar</button></p>
 ```
+
+Ahora queremos la comunicación del lado inverso, **queremos que el componente hijo le envíe información al componente padre**. La información que enviaremos será la elección del equipo elegido para un superhéroe en cuestión, para que se muestre en el profile del mismo. Para realizar esto, ocuparemos la clase *EventEmitter*, que permite enviar eventos entre componentes. El primer paso para realizar esto es crear en `src/app/modal-poll/modal-poll.component.ts` una variable que nos permita guardar el evento que vamos a crear y que posteriormente enviaremos, además esta variable debe contener el decorador Output que le indicará al componente que es una variable que se compartirá con otro componente:
+```
+...
+
+@Output() setTeam:EventEmitter<string> = new EventEmitter<string>();
+...
+
+```
+
+También será necesario incluir una función que llene esa variable, de forma tal que le permita empaquetarla y enviarla en la forma de un evento. Para esto en el mismo archivo que editamos anteriormente, hacemos:
+
+```
+send_team(team: string): void {
+    this.setTeam.emit(team);
+    this.toggle_modal();
+  }
+```
+Luego en el html, `src/app/modal-poll/modal-poll.component.html`, asociamos la función recién creada a un evento click. Lo que ocurrirá aquí es que desde la interfaz se mandará el string *azul* como evento, una vez sea clickado ese botón:
+```
+<div class="group bg-blue to_the_left" (click)="send_team('azul')">Azul</div>
+```
+Lo que necesitamos ahora es preparar al componente padre para recibir tal evento, por tanto, en `src/app/hero-profile/hero-profile.component.ts`, creamos una variable que recibirá el team y la función que manipulará esa información guardada en *team*:
+```
+public team:string = "";
+....
+getTeam(team):void{
+    this.team = team;
+    this.heroesService.teams.set(this.heroe.id, this.team);
+  }
+.....
+
+```
+En este último código, podemos observar que estamos ocupando un atributo del servicio que no habíamos usado antes. Dado que no podemos modificar la API que consultamos, para hacer que persista la elección del equipo, creamos un objeto Map que permita guardar las asociaciones entre un héroe y un equipo en el servicio `src/app/heroes.service.ts`. La razón por la que se hace en el servicio es que queremos que esta información esté disponible para todos los componentes. Para ello, en este archivo, agregamos estas líneas:
+
+Primero una variable que permita asociar un color en nombre natural con su código en hexadecimal:
+```
+public group_colors = {"azul" : "#1f8ff7",
+            "violeta":"#a43de3",
+            "naranjo":"#df5c0f",
+            "verde":"#0ea521"}
+```
+También agregamos el atributo que guardará las asociaciones:
+```
+  public teams = new Map();
+
+```
+
+
+
+
+
