@@ -7,7 +7,7 @@
   </form>
   <div *ngFor="let heroe of heroesService.heroes; let i = index;" class="col-xs-12 col-sm-6 col-md-3">
     <a [routerLink]="'/heroe/' + heroe.id" class="hero-entry" [style.border-color]="heroesService['group_colors'][heroe.teamColor]" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
-      <a>{{heroe.name}}</a>
+      <span>{{heroe.name}}</span>
     </a>
   </div>
   <div class="paginator col-xs-12">
