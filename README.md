@@ -1,4 +1,4 @@
-# Desarrolando una aplicación con Angular y Angular CLI
+# Desarrollando una aplicación con Angular y Angular CLI
 
 ## Pre-requisitos
 
