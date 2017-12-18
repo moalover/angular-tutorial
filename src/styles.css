@@ -3,6 +3,16 @@
 
 body {
     background-color: #d6d6d6 !important;
+    background-image: url(http://i.imgur.com/dTjnnHe.jpg);
+    background-size: cover;
+}
+
+h1 {
+    background-color: #fd253b;
+    color: #ffffff !important;
+    padding: 5px;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
 }
 
 .hero-entry {
@@ -50,8 +60,17 @@ body {
     float: right;
 }
 
-.heroe-profile img{
+.heroe-profile h3, .heroe-profile p, .heroe-profile span.modified {
+    background-color: #ffffff;
+    transform: rotate(2deg);
+    padding: 6px;
+    border: 1px solid #000000;
+}
+
+.heroe-profile img {
+    transform: rotate(-4deg);
     width: 100%;
+    border: 10px solid #ffffff;
 }
 
 .heroe-profile .goback{

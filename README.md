@@ -626,16 +626,17 @@ Ya tenemos la data del heroe en el componente _HeroProfile_, solo nos queda actu
 ```
 <ng-container *ngIf="heroe">
   <h1 class="text-center">{{heroe.name}}</h1>
-  
-  <div class="row" class="heroe-profile">
+  <div class="container">
+    <div class="row" class="heroe-profile">
 
-    <div class="col-xs-12 col-sm-6 col-md-4">
-      <img [src]="heroe.thumbnail.path + '.' + heroe.thumbnail.extension">
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-8">
-      <h3>Descripción</h3>
-      <p>{{heroe.description}}</p>
-      <span class="modified">{{heroe.modified | date:'fullDate'}}, {{heroe.modified | date:'shortTime'}}</span>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <img [src]="heroe.thumbnail.path + '.' + heroe.thumbnail.extension">
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-8">
+        <h3>Descripción</h3>
+        <p>{{heroe.description}}</p>
+        <span class="modified">{{heroe.modified | date:'fullDate'}}, {{heroe.modified | date:'shortTime'}}</span>
+      </div>
     </div>
   </div>
 </ng-container>
