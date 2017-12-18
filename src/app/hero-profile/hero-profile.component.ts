@@ -25,7 +25,7 @@ export class HeroProfileComponent implements OnInit {
       this.id = params.id;
       this.heroesService.getHeroe(this.id).subscribe(data => {
         const temp = data.data.results[0];
-        this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,this.heroesService.teams.get(temp.id));
+        this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,this.heroesService.getTeamColor(temp.id));
         console.log("Tiene equipo?");
         console.log(this.heroe.teamColor);
         this.team = this.heroe.teamColor;

@@ -868,7 +868,104 @@ También agregamos el atributo que guardará las asociaciones:
   public teams = new Map();
 
 ```
+Se crea la función que buscará si el superheroe tiene equipo:
+```
+  getTeamColor(id):string{
+      if(this.teams.get(id)!=undefined){
+      return this.teams.get(id);
+      }
+      else{
+      return "";
+      }
+  }
+```
+Y se coloca en la construcción inicial de todos los héroes para que pinte el color del equipo al que se le asignó:
+```
+new Heroe(
+    result.id,
+    result.name,
+    result.description,
+    result.modified,
+    result.thumbnail,
+    result.resourceURI,
+    this.getTeamColor(result.id)
+  )
+```
 
+Regresamos al componente padre. Nos falta establecer el binding desde el html del componente padre, es decir, recibir la información a través del objeto $event, para ello en el archivo `src/app/hero-profile/hero-profile.component.ts`, agregamos este atributo sobre el selector del componente hijo, quedando de esta forma:
+```
+<modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" #modal></modal-poll>
+```
+
+*setTeam* es la función del componente hijo que emitirá el evento que guarda el equipo que se eligió. Y *getTeam* guardará el payload de lo que retorna la primera función, que básicamente es un evento $event.
+
+De igual forma, ya podremos ver en el componente padre la selección que se realiza en el modal. Para comprobarlo, agregamos, en el mismo html, esta línea de código para ver el valor:
+```
+<p *ngIf="team!=undefined && team!=''">Acabas de clasificar a tu heroe en el equipo <b [style.color]="heroesService.group_colors[team]">{{team}}</b></p>
+```
+
+Este cambio a su vez nos servirá para que se evidencie la elección del equipo en el listado externo. Para ello basta agregar en el archivo
+`src/app/listado-de-heroes/listado-de-heroes.component.html`, las siguientes líneas:
+
+```
+<a [routerLink]="'/heroe/' + heroe.id" class="hero-entry" [style.border-color]="heroesService['group_colors'][heroe.teamColor]" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
+      <span>{{heroe.name}}</span>
+    </a>
+```
+Nos dirigimos al selector a, que contiene el id y thumbnail de la foto del héroe. Como podemos ve, el atributo que agregamos fue:
+```
+[style.border-color]="heroesService['group_colors'][heroe.teamColor]" 
+```
+
+Por último, vamos a comprobar si se agregó bien el equipo al superheroe. Deben ocurrir dos cosas:
+- Al ingresar al componente *heroe-profile*, debe indicar el equipo al cual ya pertenece el héroe.
+- Al ingresar al componente modal-poll, se debe marcar la selección realizada previamente.
+
+Lo primero se logrará revisando si el superheroe pertenece a algún grupo, al invocar la función getTeamColor del servicio que creamos, que se colocará en la creación del heroe. Todo esto en el archivo `src/app/hero-profile/hero-profile.component.ts`
+```
+this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,this.heroesService.getTeamColor(temp.id));
+```
+Así mismo, se guardará ese valor en la
+variable team del componente, que inicialmente la inicializamos en "".
+```
+this.team = this.heroe.teamColor;
+```
+
+Lo segundo se logra mandándole el team seleccionado que se guardó en la variable team del componente `src/app/hero-profile/hero-profile.component.ts`, al componente del modal a través de una variable con decorador @Input, que permitirá instanciar la variable team_selected del componente modal desde el componente padre que es heroes-profile. Por tanto primero definimos la variable en el componente modal(`src/app/modal-poll/modal-poll.component.ts`), haciendo:
+```
+@Input() public team_selected : string;
+```
+
+Y luego en el html del componente padre o hero-profile(`src/app/hero-profile/hero-profile.component.html`), colocamos:
+```
+[team_selected]="team" 
+```
+Lo cual nos quedaría en:
+```
+<modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" [team_selected]="team" #modal></modal-poll>
+```
+
+Finalmente, en la interfaz del componente hijo (modal-poll), nos valemos de la directiva ngClass, para establecer una lógica que permita agregar una clase selected al div que haya sido seleccionado, agregando en cada botón la siguiente propiedad, con su color correspondiente:
+```
+[ngClass]="{'selected': team_selected=='azul'}"
+```
+Para hacer más rápido el trabajo, reemplazamos todo el bloque de botones con:
+```
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-blue to_the_left" [ngClass]="{'selected': team_selected=='azul'}" (click)="send_team('azul')">Azul</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-violet" [ngClass]="{'selected': team_selected=='violeta'}" (click)="send_team('violeta')">Violeta</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-orange to_the_left" [ngClass]="{'selected': team_selected=='naranjo'}" (click)="send_team('naranjo')">Naranjo</div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+                      <div class="group bg-green" [ngClass]="{'selected': team_selected=='verde'}" (click)="send_team('verde')">Verde</div>
+                    </div>
+                  </div>
+```
 
 
 
