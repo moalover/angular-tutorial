@@ -1,4 +1,4 @@
-# Construllendo una aplicación con Angular y Angular CLI
+# Desarrolando una aplicación con Angular y Angular CLI
 
 ## Pre-requisitos
 
@@ -62,7 +62,7 @@ Supóngase que queremos crear un nuevo proyecto llamado *"BechMarvel"*:
 
 Pero, ¿que está pasando cuando ejecutamos este comando?:
 
-- Un nuevo directorio llamado "AccenTest" es creado.
+- Un nuevo directorio llamado "BechMarvel" es creado.
 - Todo los archivos del source de tu aplicación son creados, basándose en el nombre ("BechMarvel" en este caso) y siguiendo las buenas prácticas oficiales de Angular.
 - Las dependencias son instaladas (usando NPM).
 - Se configura TypeScript.
@@ -112,7 +112,7 @@ export class ListadoDeHeroesComponent implements OnInit {
 
 Aquí vale la pena darle especial atención a la propiedad *"selector"* que contiene un selector al estilo de CSS, y es esto lo que va a utilizar Angular para incluir nuestro modulo en nuestra aplicación.
 
-Lo veremos con un ejemplo, vamos a editar el template (HTML) de nuestro componente principal que se encuentra en `src/app/listado-de-heroes/listado-de-heroes.component.html`, de forma que se vea así:
+Lo veremos con un ejemplo, vamos a editar el template (HTML) de nuestro componente principal que se encuentra en `src/app/app.component.html`, de forma que se vea así:
 
 ```
 <app-listado-de-heroes></app-listado-de-heroes>
@@ -205,7 +205,7 @@ Vamos a editar el template de nuestro componente ListadoDeHeroes, en `src/app/li
 Vamos a instalar el paquete de bootstrap mediante _npm_:
 
 ```
-> npm install –s bootstrap
+> npm install --save bootstrap
 ```
 
 Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_modules/bootstrap/dist/css/bootstrap.min.css`, ahora solo tenemos que configurar Angular CLI para que incluya este archivo de forma automática en nuestra aplicación, para esto editamos el archivo `.angular-cli.json` en la raiz de nuestra aplicación:
@@ -214,7 +214,7 @@ Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_m
 …
 "styles": [
 	"styles.css", 
-	"../node_modules/bootstrap/dist/css/bootstrap.min.css“
+	"../node_modules/bootstrap/dist/css/bootstrap.min.css"
 ],
 …
 ```
@@ -230,7 +230,7 @@ Una de las ventajas de desarrollar con _TypeScript_ es que aplicar conceptos de 
 Ahora vamos a generar una clase llamada Heroe usando Angular CLI:
 
 ```
-> ng g /classes/Heroe
+> ng g class /classes/Heroe
 ```
 
 Este comando nos va a generar el archivo `src/app/classes/heroe.ts`. El que vamos a editar a continuación para agregar nuevos atributos:
@@ -265,11 +265,13 @@ Después vamos a incluir el siguiente fragmento en el template de nuestro compon
 
 ```
 <h1 class="text-center">{{title}}</h1>
-<div class="row">
-  <div class="col-xs-12 col-sm-6 col-md-3">
-    <a class="hero-entry" [style.background-image]="'url(' + heroes[0].thumbnail.path + '.' + heroes[0].thumbnail.extension + ')'">
-      <span>{{heroes[0].name}}</span>
-    </a>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-3">
+      <a class="hero-entry" [style.background-image]="'url(' + heroes[0].thumbnail.path + '.' + heroes[0].thumbnail.extension + ')'">
+        <span>{{heroes[0].name}}</span>
+      </a>
+    </div>
   </div>
 </div>
 ```
@@ -303,8 +305,8 @@ ngOnInit() {
 Ahora si navegamos a nuestra aplicación veremos la información del super-héroe. ¿Pero que pasa si tenemos mas de uno?, para solucionar este problema haremos uso de otra directiva estructural, en este caso `*ngFor`, que nos permite iterar sobre un array de elementos. Haremos los siguientes cambios en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
 
 ```
-    <div class="col-xs-12 col-sm-6 col-md-3">
-        <a class="hero-entry" *ngIf="heroes.length > 0" *ngFor="let heroe of heroesService.heroes" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
+    <div *ngFor="let heroe of heroes" class="col-xs-12 col-sm-6 col-md-3">
+        <a class="hero-entry" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
         <span>{{heroe.name}}</span>
         </a>
     </div>
@@ -343,6 +345,7 @@ Ahora podemos hacer uso de este módulo en nuestro servicio, para esto editemos 
 
 ```
 import { HttpClient } from '@angular/common/http';
+import { Heroe } from './classes/heroe';
 ...
 
 @Injectable()
@@ -350,6 +353,7 @@ export class HeroesService {
 
   private protocol = 'https:';
   private ApiUrl = '//gateway.marvel.com:443/v1/public/';
+  public heroes: Array<Heroe> = [];
 
   constructor(private http: HttpClient) { }
 
@@ -371,4 +375,295 @@ export class HeroesService {
       );
     });
   }
+```
+
+Con esto ya existe un servicio de nuestra aplicación que provee la funcionalidad de obtener héroes del servicio de angular. Y este servicio lo vamos a utilizar desde el componente `ListadoDeHeroes` y para esto vamos a hacer varios cambios.
+
+Importemos e inyectemos el servicio `Heroes` en el componente `ListadoDeHeroes`, editando el archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` de la siguiente forma:
+
+```
+import { HeroesService } from '../heroes.service';
+
+...
+
+    constructor(private heroesService: HeroesService) { }
+
+    ngOnInit() {
+        this.heroesService.getHeroes();
+    }
+``` 
+
+Ya no vamos a utilizar la lista de héroes definida en el componente _ListadoDeHeroes_, en cambio vamos a usar la que definimos en nuestro servicio _Heroes_, por lo que vamos a eliminar esta línea de `src/app/listado-de-heroes/listado-de-heroes.component.ts`:
+
+```
+    public heroes: Array<Heroe> = [];
+```
+
+Tenemos que reflejar este cambio en el template del componente _ListadoDeHeroes_, por lo que debemos editar el archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` y cambiar la variable usada en el `*ngFor`:
+
+```
+    <a class="hero-entry" ... *ngFor="let heroe of heroesService.heroes" ...
+```
+
+Podemos revisar la aplicación desde cualquier navegador para ver los cambios en vivo.
+
+## 11 - Búsqueda de héroes
+
+Nos falta algo fundamental en nuestro componente, y es la capacidad de buscar un héroe en específico. Para esto vamos a añadir un filtro o campo de búsqueda en _ListadoDeHeroes_.
+
+Antes de eso debemos asegurarnos que nuestro servicio _Heroes_ soporte el filtrado, por lo que debemos editar la función _getHeroes_ en `src/app/heroes.service.ts`:
+
+```
+  getHeroes (nameStartsWith?: string) {
+    const url = this.protocol + this.ApiUrl + 'characters?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b'
+    + (nameStartsWith ? ('&nameStartsWith=' + nameStartsWith) : '');
+    ...
+  }
+```
+
+Lo segundo es agregar un nuevo atributo a la clase de nuestro componente _ListadoDeHeroes_ que nos sirva como campo de búsqueda, y adicionalmente creamos una función que realice dicha búsqueda, para esto editamos `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+export class ListadoDeHeroesComponent implements OnInit {
+
+  ...
+  public searchString : string;
+
+  ...
+  submitSearch() {
+    this.heroesService.getHeroes(this.searchString);
+  }
+```
+
+Lo que sigue es agregar el campo de texto al template en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+<h1 class="text-center">{{title}}</h1>
+<div class="row">
+
+
+  <form (ngSubmit)="submitSearch()">
+    <div class="form-group col-xs-12">
+      <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
+    </div>
+  </form>
+  ...
+```
+
+Para resolver el error que la aplicación arroja en este momento, es necesario editar el módulo principal, en `src/app/app.module.ts` agregando el módulo _FormsModule_:
+
+```
+import { FormsModule } from '@angular/forms';
+...
+
+@NgModule({
+  declarations: [
+    ...
+  ],
+  imports: [
+    ...,
+    FormsModule
+  ],
+  ...
+```
+
+Nótese la sentencia `ngSubmit` y el two-way binding `ngModel`. Lo que hacen en escencia es reaccionar al event "submit" del formulario y enlazar el atributo 'searchString' con el campo de texto respectivamente.
+
+## 12 - Paginación
+
+Nos sigue faltando algo muy importante en nuestro componente _ListadoDeHeroes_ y es la habilidad de poder paginar entre todos los héroes provistos por el servicio web de Marvel.
+
+Tal y como hicimos al agregar la búsqueda de heroes, lo primero es asegurarnos de que el servicio _Heroes_ soporte la paginación. Por lo debemos editar la función _getHeroes_ en `src/app/heroes.service.ts`:
+
+```
+export class HeroesService {
+    ...
+    public page = 0;
+    public step = 20;
+    public total = 0;
+
+    ...
+
+    resetPager() {
+        this.page = 0;
+    }
+
+    getHeroes (nameStartsWith?: string, page?: number) {
+        if (page) {
+        this.page = page;
+        }
+        const url = this.protocol + this.ApiUrl + 'characters?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b'
+        + '&offset=' + (this.page * this.step)
+        + (nameStartsWith ? ('&nameStartsWith=' + nameStartsWith) : '');
+        this.http.get<any>(url).subscribe((data) => {
+            this.heroes = [];
+            this.total = Math.ceil(data.data.total / this.step);
+        ...
+```
+
+Ahora vamos a agregar dos funciones a la clase del componente _ListadoDeHeroes_, editando `src/app/listado-de-heroes/listado-de-heroes.component.ts`
+
+```
+...
+export class ListadoDeHeroesComponent implements OnInit {
+  ...
+  prevPage() {
+    this.heroesService.getHeroes(this.searchString, this.heroesService.page - 1);
+  }
+
+  nextPage() {
+    this.heroesService.getHeroes(this.searchString, this.heroesService.page + 1);
+  }
+```
+
+Por último vamos a editar el template del componente _ListadoDeHeroes_ para agregar la paginación al HTML. Debemos editar el archivo `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+<div class="row">
+  ...
+  <div class="paginator col-xs-12">
+    <a class="paginator-prev" (click)="prevPage()" *ngIf="heroesService.page > 0">Prev</a>
+    Página {{heroesService.page + 1}} de {{heroesService.total}}
+    <a class="paginator-next" (click)="nextPage()" *ngIf="heroesService.page < heroesService.total - 1">Next</a>
+  </div>
+</div>
+```
+
+## 13 - Perfil de héroe
+
+Finalmente nuestra aplicación tiene lo escencial para consultar y listar héroes de forma amigable y efectiva. El próximo paso es poder seleccionar un héroe de la lista y ver más detalles del mismo. Para esto vamos a generar un nuevo componente usando _Angular CLI_:
+
+```
+> ng g component HeroProfile
+```
+
+De igual forma vamos a agregar una ruta en nuestro módulo enrutador que envíe al usuario al nuevo componente, para esto editamos `src/app/app-routing.module.ts`:
+
+```
+import { HeroProfileComponent } from './hero-profile/hero-profile.component';
+
+...
+
+const routes: Routes = [
+  { path: 'listado-heroes', component: ListadoDeHeroesComponent},
+  { path: 'heroe/:id', component: HeroProfileComponent},
+  { path: '**', redirectTo: '/listado-heroes'}
+];
+```
+
+Hasta ahora nuestras entradas en la lista de héroes del componente _ListadoDeHeroes_ han sido enlaces (\<a>) que no van a ningún lugar (no tienen atributo href), eso está a punto de cambiar. Editemos el template del _ListadoDeHeroes_ para que los enlaces de cada héroe enruten al usuario al compente _HeroProfile_ recién creado, para eso editemos `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+    <div *ngFor="let heroe of heroesService.heroes" class="col-xs-12 col-sm-6 col-md-3">
+        <a [routerLink]="['/heroe', heroe.id]" ...>
+            ...
+        </a>
+    </div>
+```
+
+Probemos haciendo click en algún héroe a ver que pasa.
+
+El próximo paso es capturar el parámetro `:id` que definimos en la ruta a _HeroProfile_, para eso editamos `src/app/hero-profile/hero-profile.component.ts`:
+
+```
+...
+import { ActivatedRoute } from '@angular/router';
+
+...
+
+export class HeroProfileComponent implements OnInit {
+  private id;
+  
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = params.id;
+    });
+  }
+
+```
+
+Ahora queremos ampliar nuestro servicio `Heroes` para poder hacer consultas de los detalles de un heroe en particular en base a su id (que ya poseemos). Editamos `src/app/heroes.service.ts` para agregar una nueva función:
+
+```
+export class HeroesService {
+    ...
+    getHeroe(id) {
+        const url = this.protocol + this.ApiUrl + 'characters/' + id + '?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b';
+        return this.http.get<any>(url);
+    }
+```
+
+A continuación podemos ampliar el componente `HeroProfile` para que utilice el parámetro id y haga una consulta al servicio web mediante el servicio `Heroes`. Editamos `src/app/hero-profile/hero-profile.component.ts`:
+
+```
+...
+import { Heroe } from '../classes/heroe';
+import { HeroesService } from '../heroes.service';
+...
+
+export class HeroProfileComponent implements OnInit {
+  private id;
+  public heroe: Heroe;
+  
+  constructor(private route: ActivatedRoute, private heroesService: HeroesService) { }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = params.id;
+      this.heroesService.getHeroe(this.id).subscribe(data => {
+        const temp = data.data.results[0];
+        this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,'');
+      });
+    });
+    
+  }
+```
+
+Ya tenemos la data del heroe en el componente _HeroProfile_, solo nos queda actualizar el template del mismo para reflejarla, editemos `src/app/hero-profile/hero-profile.component.html` para que se vea así:
+
+```
+<ng-container *ngIf="heroe">
+  <h1 class="text-center">{{heroe.name}}</h1>
+  <div class="container">
+    <div class="row" class="heroe-profile">
+
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <img [src]="heroe.thumbnail.path + '.' + heroe.thumbnail.extension">
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-8">
+        <h3>Descripción</h3>
+        <p>{{heroe.description}}</p>
+        <span class="modified">{{heroe.modified | date:'fullDate'}}, {{heroe.modified | date:'shortTime'}}</span>
+      </div>
+    </div>
+  </div>
+</ng-container>
+```
+
+Por último nos queda dar la opción al usuario de regresar al listado desde el perfil de algún héroe, esta opción la podemos incluir utilizando el service _Location_ que disponibiliza Angular. Vamos a incluir este servicio en _HeroProfile_ y a crear una función que devuelva al usuario a la página anterior, para esto editamos `src/app/hero-profile/hero-profile.component.ts`:
+
+```
+...
+import { Location } from '@angular/common';
+...
+
+export class HeroProfileComponent implements OnInit {
+    ...
+
+    constructor(..., private _location: Location) { }
+
+    goBack() {
+        this._location.back();
+    }
+```
+
+Solo nos queda añadir un botón en el template de _HeroProfile_ que llame a la función `goBack` y envíe al usuario a la página anterior, así que editemos `src/app/hero-profile/hero-profile.component.html`:
+
+```
+ng-container *ngIf="heroe">
+    <h1 class="text-center">{{heroe.name}}</h1>
+    <a class="goback" (click)="goBack()">Atrás</a>
+    ...
 ```
