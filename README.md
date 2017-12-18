@@ -265,11 +265,13 @@ Después vamos a incluir el siguiente fragmento en el template de nuestro compon
 
 ```
 <h1 class="text-center">{{title}}</h1>
-<div class="row">
-  <div class="col-xs-12 col-sm-6 col-md-3">
-    <a class="hero-entry" [style.background-image]="'url(' + heroes[0].thumbnail.path + '.' + heroes[0].thumbnail.extension + ')'">
-      <span>{{heroes[0].name}}</span>
-    </a>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-3">
+      <a class="hero-entry" [style.background-image]="'url(' + heroes[0].thumbnail.path + '.' + heroes[0].thumbnail.extension + ')'">
+        <span>{{heroes[0].name}}</span>
+      </a>
+    </div>
   </div>
 </div>
 ```
@@ -303,8 +305,8 @@ ngOnInit() {
 Ahora si navegamos a nuestra aplicación veremos la información del super-héroe. ¿Pero que pasa si tenemos mas de uno?, para solucionar este problema haremos uso de otra directiva estructural, en este caso `*ngFor`, que nos permite iterar sobre un array de elementos. Haremos los siguientes cambios en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
 
 ```
-    <div class="col-xs-12 col-sm-6 col-md-3">
-        <a class="hero-entry" *ngIf="heroes.length > 0" *ngFor="let heroe of heroes" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
+    <div *ngFor="let heroe of heroes" class="col-xs-12 col-sm-6 col-md-3">
+        <a class="hero-entry" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
         <span>{{heroe.name}}</span>
         </a>
     </div>
@@ -343,6 +345,7 @@ Ahora podemos hacer uso de este módulo en nuestro servicio, para esto editemos 
 
 ```
 import { HttpClient } from '@angular/common/http';
+import { Heroe } from './classes/heroe';
 ...
 
 @Injectable()
@@ -444,6 +447,23 @@ Lo que sigue es agregar el campo de texto al template en `src/app/listado-de-her
       <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
     </div>
   </form>
+  ...
+```
+
+Para resolver el error que la aplicación arroja en este momento, es necesario editar el módulo principal, en `src/app/app.module.ts` agregando el módulo _FormsModule_:
+
+```
+import { FormsModule } from '@angular/forms';
+...
+
+@NgModule({
+  declarations: [
+    ...
+  ],
+  imports: [
+    ...,
+    FormsModule
+  ],
   ...
 ```
 
