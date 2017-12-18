@@ -304,7 +304,7 @@ Ahora si navegamos a nuestra aplicación veremos la información del super-héro
 
 ```
     <div class="col-xs-12 col-sm-6 col-md-3">
-        <a class="hero-entry" *ngIf="heroes.length > 0" *ngFor="let heroe of heroesService.heroes" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
+        <a class="hero-entry" *ngIf="heroes.length > 0" *ngFor="let heroe of heroes" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
         <span>{{heroe.name}}</span>
         </a>
     </div>
@@ -350,6 +350,7 @@ export class HeroesService {
 
   private protocol = 'https:';
   private ApiUrl = '//gateway.marvel.com:443/v1/public/';
+  public heroes: Array<Heroe> = [];
 
   constructor(private http: HttpClient) { }
 
@@ -371,4 +372,104 @@ export class HeroesService {
       );
     });
   }
+```
+
+Con esto ya existe un servicio de nuestra aplicación que provee la funcionalidad de obtener héroes del servicio de angular. Y este servicio lo vamos a utilizar desde el componente `ListadoDeHeroes` y para esto vamos a hacer varios cambios.
+
+Importemos e inyectemos el servicio `Heroes` en el componente `ListadoDeHeroes`, editando el archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` de la siguiente forma:
+
+```
+import { HeroesService } from '../heroes.service';
+
+...
+
+    constructor(private heroesService: HeroesService) { }
+
+    ngOnInit() {
+        this.heroesService.getHeroes();
+    }
+``` 
+
+Ya no vamos a utilizar la lista de héroes definida en el componente _ListadoDeHeroes_, en cambio vamos a usar la que definimos en nuestro servicio _Heroes_, por lo que vamos a eliminar esta línea de `src/app/listado-de-heroes/listado-de-heroes.component.ts`:
+
+```
+    public heroes: Array<Heroe> = [];
+```
+
+Tenemos que reflejar este cambio en el template del componente _ListadoDeHeroes_, por lo que debemos editar el archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` y cambiar la variable usada en el `*ngFor`:
+
+```
+    <a class="hero-entry" ... *ngFor="let heroe of heroesService.heroes" ...
+```
+
+Podemos revisar la aplicación desde cualquier navegador para ver los cambios en vivo.
+
+## 11 - Búsqueda de héroes
+
+Nos falta algo fundamental en nuestro componente, y es la capacidad de buscar un héroe en específico. Para esto vamos a añadir un filtro o campo de búsqueda en _ListadoDeHeroes_.
+
+Antes de eso debemos asegurarnos que nuestro servicio _Heroes_ soporte el filtrado, por lo que debemos editar la función _getHeroes_ en `src/app/heroes.service.ts`:
+
+```
+  getHeroes (nameStartsWith?: string) {
+    const url = this.protocol + this.ApiUrl + 'characters?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b'
+    + (nameStartsWith ? ('&nameStartsWith=' + nameStartsWith) : '');
+    ...
+  }
+```
+
+Lo segundo es agregar un nuevo atributo a la clase de nuestro componente _ListadoDeHeroes_ que nos sirva como campo de búsqueda, y adicionalmente creamos una función que realice dicha búsqueda, para esto editamos `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+export class ListadoDeHeroesComponent implements OnInit {
+
+  ...
+  public searchString : string;
+
+  ...
+  submitSearch() {
+    this.heroesService.getHeroes(this.searchString);
+  }
+```
+
+Lo que sigue es agregar el campo de texto al template en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+
+```
+<h1 class="text-center">{{title}}</h1>
+<div class="row">
+
+
+  <form (ngSubmit)="submitSearch()">
+    <div class="form-group col-xs-12">
+      <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
+    </div>
+  </form>
+  ...
+```
+
+Nótese la sentencia `ngSubmit` y el two-way binding `ngModel`. Lo que hacen en escencia es reaccionar al event "submit" del formulario y enlazar el atributo 'searchString' con el campo de texto respectivamente.
+
+## 12 - Paginación
+
+Nos sigue faltando algo muy importante en nuestro componente _ListadoDeHeroes_ y es la habilidad de poder paginar entre todos los héroes provistos por el servicio web de Marvel.
+
+Como hicimos al agregar la búsqueda de heroes, lo primero es asegurarnos de que el servicio _Heroes_ soporte la paginación. Por lo debemos editar la función _getHeroes_ en `src/app/heroes.service.ts`:
+
+```
+export class HeroesService {
+    ...
+    public page = 0;
+    public step = 20;
+    public total = 0;
+
+    ...
+
+    resetPager() {
+        this.page = 0;
+    }
+
+    getHeroes (nameStartsWith?: string, page?: number) {
+        if (page) {
+        this.page = page;
+        }
 ```
