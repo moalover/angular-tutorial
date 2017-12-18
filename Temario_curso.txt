@@ -22,9 +22,9 @@ importó bien la librería.
     8.6.- Verificar en el componente que se muestra la info de la clase seteada.
 9.- Creamos servicio para consultar API de Marvel:
     ng g service Heroes -m app.module.ts.
-    9.1.- Debe añadirse como provider en el módulo de la app
+    9.1.- Debe añadirse como provider en el módulo de la app.
     9.2.- Crear la función para consultar api con httpClientModule -> colocarlo en los imports del módulo de la app.
-    9.3.- Generar el listado de heroes desde el servicio con los atributos que sólo vamos a utilizar de cada uno. (quitarlo del componente)
+    9.3.- Generar el listado de heroes desde el servicio con los atributos que sólo vamos a utilizar de cada uno. (quitarlo del componente)-
     9.4.- Incluir el parametro opcional de busqueda en la funcion
 10.- Agregamos el campo de búsqueda:
     10.1._ Agregamos el formulario en el html con la funciona ngSubmit (que ahorita rompe)
@@ -32,18 +32,19 @@ importó bien la librería.
     10.3._ Creamos el atributo searchString en el componente y lo linkeamos con el input de busqueda
     10.4._ Implementamos la busqueda
 11. Implementamos paginación:
-    11.1._ Agregamos el HTML al componente
-    11.2._ En el servicio agregamos los atributos page, step y total
-    11.3._ Agregamos el uso de page en la funcion getHeroes, seteamos el total (ultima pagina)
-    11.4._ Creamos las funcionas nextPage y prevPage en el controlados y las llamamos
-    11.5._ Agregamos los ngIf para esconder los botones de prev y next
+    11.1._ Agregamos el HTML al componente.
+    11.2._ En el servicio agregamos los atributos page, step y total.
+    11.3._ Agregamos el uso de page en la funcion getHeroes, seteamos el total (ultima pagina).
+    11.4._ Creamos las funcionas nextPage y prevPage en el controlados y las llamamos.
+    11.5._ Agregamos los ngIf para esconder los botones de prev y next.
 12. Implementamos el heroe profile:
-    12.1._ ng g component HeroProfile
-    12.2._ Agregamos la ruta al router con el parametro id
-    12.3._ Agregamos los links
-    12.4._ Capturamos el parametro url en el componente nuevo
-    12.5._ Agregamos el html al componente
-    12.6._ Agregamos la funcion getHeroe al servicio que devuelva un observable
+    12.1._ ng g component HeroProfile.
+    12.2._ Agregamos la ruta al router con el parametro id.
+    12.3._ Agregamos los links.
+    12.4._ Capturamos el parametro url en el componente nuevo.
+    12.5._ Agregamos el html al componente.
+    12.6._ Agregamos la funcion getHeroe al servicio que devuelva un observable.
     12.7._ Usamos la nueva funcion del servicio desde el componente en el ngOnInit
-    12.8._ Ponemos el ngIf con un ng-container para que no de error
-    12.9._ Ponemos el boton de "Atrás"
+    12.8._ Ponemos el ngIf con un ng-container para que no de error.
+    12.9._ Ponemos el boton de "Atrás".
+13. 
