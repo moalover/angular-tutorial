@@ -635,7 +635,7 @@ Ya tenemos la data del heroe en el componente _HeroProfile_, solo nos queda actu
       <div class="col-xs-12 col-sm-6 col-md-8">
         <h3>Descripción</h3>
         <p>{{heroe.description}}</p>
-        <span class="modified">{{heroe.modified | date:'fullDate'}}, {{heroe.modified | date:'shortTime'}}</span>
+        <p class="modified">{{heroe.modified | date:'fullDate'}}, {{heroe.modified | date:'shortTime'}}</p>
       </div>
     </div>
   </div>
