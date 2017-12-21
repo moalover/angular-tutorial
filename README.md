@@ -4,7 +4,7 @@
 
 ### Node
 
-En su ambiente de desarrollo de estar instalado [Node.js](https://nodejs.org/es/download/) antes de continuar.
+En su ambiente de desarrollo debe estar instalado [Node.js](https://nodejs.org/es/download/) antes de continuar.
 
 Para asegurarse que se encuentre instalado puede hacer uso del siguiente comando
 
@@ -15,7 +15,7 @@ v6.11.3
 
 ### Angular CLI
 
-Para instalar [Angular CLI](https://cli.angular.io/) utilizando el manejador de paquetes de [Node.js](https://nodejs.org/es/download/) (npm) debe ejecutar el siguiente comando:
+Angular CLI requiere que se tenga instalado Node 6.9.0 o una versión superior, junto con NPM 3. Para instalar [Angular CLI](https://cli.angular.io/) utilizando el manejador de paquetes de [Node.js](https://nodejs.org/es/download/) (npm) debe ejecutar el siguiente comando:
 
 ```
 > npm install -g @angular/cli
@@ -63,17 +63,22 @@ Supóngase que queremos crear un nuevo proyecto llamado *"BechMarvel"*:
 Pero, ¿que está pasando cuando ejecutamos este comando?:
 
 - Un nuevo directorio llamado "BechMarvel" es creado.
-- Todo los archivos del source de tu aplicación son creados, basándose en el nombre ("BechMarvel" en este caso) y siguiendo las buenas prácticas oficiales de Angular.
+- Todos los archivos del source de tu aplicación son creados, basándose en el nombre ("BechMarvel" en este caso) y siguiendo las buenas prácticas oficiales de Angular.
 - Las dependencias son instaladas (usando NPM).
 - Se configura TypeScript.
 - Se configura Karma (Testing).
 - Se configura Protractor (Testing).
-- EL proyecto queda listo y configurado para que puedas usarlo como base y seguir construyendo sobre el mismo.
+- El proyecto queda listo y configurado para que puedas usarlo como base y seguir construyendo sobre el mismo.
+
+Para continuar, nos dirigiremos al directorio recién creado dónde se creo la aplicación, para ello, en el terminal hacemos:
+```
+>  cd BechMarvel
+```
 
 La forma más sencilla de ejecutar una aplicación para hacer pruebas y desarrollar nuevas funcionalidades es mediante el siguiente comando:
 
 ```
-> ng serve
+> ng serve --open
 ```
 
 ¿que está pasando cuando ejecutamos este comando?:
@@ -81,6 +86,8 @@ La forma más sencilla de ejecutar una aplicación para hacer pruebas y desarrol
 - Se carga la configuración definida en el archivo .angular-cli.json.
 - Se ejecuta Webpack para construir y empaquetar todo el código en JavaScript y CSS.
 - Se inicia el Webpack Dev Server en el puerto 4200.
+- Con el flag --open, se abrirá automáticamente una ventana del navegador con la aplicación corriendo. Es un flag opcional, que si no queremos que ocurra este comportamiento, podemos omitirlo.
+
 
 ## 3 - Crear un componente
 
@@ -98,7 +105,7 @@ Vamos a incluir el siguiente título en el archivo `src/app/listado-de-heroes/li
 <h1>HOLA SOY EL COMPONENTE</h1>
 ```
 
-## 4 - Incluyamos el componente ListadoDeHeroes in nuestro componente principal
+## 4 - Incluyamos el componente ListadoDeHeroes en nuestro componente principal
 
 Si inspeccionamos al archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` en donde se define el componente *ListadoDeHeroes* veremos el siguiente decorador:
 
@@ -683,7 +690,7 @@ Llenaremos la clase del componente recién creada con los siguientes imports que
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-  selector: 'modal-poll',
+  selector: 'app-modal-poll',
   templateUrl: './modal-poll.component.html',
   styleUrls: ['./modal-poll.component.css']
 })
@@ -789,7 +796,7 @@ public question_modal: string;
 ```
 Adicionalmente, debemos agregar el selector html o tag html que identifica al componente hijo dentro del componente padre, así como también, el atributo que deseamos llenar desde el componente padre *title_modal* es el nombre con el que se definió el atributo en el componente hijo, mientras que question_modal es el nombre con el que se declaró en el componente padre. Por tanto, en el archivo `src/app/hero-profile/hero-profile.component.html` agregamos lo siguiente:
 ```
-<modal-poll [title_modal]="question_modal"></modal-poll>
+<app-modal-poll [title_modal]="question_modal"></app-modal-poll>
 ```
 
 Ya tenemos listas las asociaciones, pero nos hace falta un evento para disparar o invocar al componente del modal. Para ello, primero definimos una variable de template local sobre el tag html del componente hijo, en el archivo `src/app/hero-profile/hero-profile.component.html`, de esta forma: 

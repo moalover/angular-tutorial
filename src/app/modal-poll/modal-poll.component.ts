@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-  selector: 'modal-poll',
+  selector: 'app-modal-poll',
   templateUrl: './modal-poll.component.html',
   styleUrls: ['./modal-poll.component.css']
 })
