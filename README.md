@@ -291,7 +291,7 @@ Es posible que si navegamos a nuestro proyecto nos de un error, pues _heroes[0]_
     <a class="hero-entry" *ngIf="heroes.length > 0" ...
 ```
 
-Ahora vamos a crear nuestro primer héroe, en la función ngOnInit de nuestro componente _ListadoDeHeroes_ (para más información consultar [aquí](https://v4.angular.io/guide/lifecycle-hooks)). Para ello vamos a incluir este código en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
+Ahora vamos a crear nuestro primer héroe, en la función ngOnInit de nuestro componente _ListadoDeHeroes_ (para más información consultar [aquí](https://v4.angular.io/guide/lifecycle-hooks)). Para ello vamos a incluir este código en `src/app/listado-de-heroes/listado-de-heroes.component.ts`:
 
 ```
 ngOnInit() {
