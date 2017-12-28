@@ -803,7 +803,7 @@ Adicionalmente, debemos agregar el selector html o tag html que identifica al co
 Ya tenemos listas las asociaciones, pero nos hace falta un evento para disparar o invocar al componente del modal. Para ello, primero definimos una variable de template local sobre el tag html del componente hijo, en el archivo `src/app/hero-profile/hero-profile.component.html`, de esta forma: 
 
 ```
-<modal-poll [title_modal]="question_modal" #modal></modal-poll>
+<app-modal-poll [title_modal]="question_modal" #modal></app-modal-poll>
 ```
 Y en el archivo `src/app/hero-profile/hero-profile.component.ts`, declaramos lo siguiente: 
 ```
@@ -950,10 +950,10 @@ Y luego en el html del componente padre o hero-profile(`src/app/hero-profile/her
 ```
 Lo cual nos quedaría en:
 ```
-<modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" [team_selected]="team" #modal></modal-poll>
+<app-modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" [team_selected]="team" #modal></app-modal-poll>
 ```
 
-Finalmente, en la interfaz del componente hijo (modal-poll), nos valemos de la directiva ngClass, para establecer una lógica que permita agregar una clase selected al div que haya sido seleccionado, agregando en cada botón la siguiente propiedad, con su color correspondiente:
+Finalmente, en la interfaz del componente hijo (app-modal-poll), nos valemos de la directiva ngClass, para establecer una lógica que permita agregar una clase selected al div que haya sido seleccionado, agregando en cada botón la siguiente propiedad, con su color correspondiente:
 ```
 [ngClass]="{'selected': team_selected=='azul'}"
 ```
