@@ -29,7 +29,7 @@ export class HeroesService {
   getHeroes (nameStartsWith?: string, page?: number) {
     console.log("TEAMS");
     console.log(Array.from(this.teams));
-    if (page) {
+    if (page || page === 0) {
       this.page = page;
     }
     const url = this.protocol + this.ApiUrl + 'characters?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b'

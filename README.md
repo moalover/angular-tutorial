@@ -220,8 +220,8 @@ Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_m
 ```
 …
 "styles": [
-	"styles.css", 
-	"../node_modules/bootstrap/dist/css/bootstrap.min.css"
+  "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "styles.css"
 ],
 …
 ```
@@ -288,7 +288,7 @@ El marcado anterior no contiene nada que no hayamos visto anteriormente a excepc
 Es posible que si navegamos a nuestro proyecto nos de un error, pues _heroes[0]_ no existe aún, para solucionar este problema vamos a hacer uso de la directiva estructural `*ngIf` de Angular, para definir cuando se va a renderizar un elemento y cuando no. Sólo hay que añadir el siguiente fragmento al template del componente _ListadoDeHeroes_ en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
 
 ```
-    <a class="hero-entry" *ngIf="heroes.length > 0" ...
+    <div class="col-xs-12 col-sm-6 col-md-3" *ngIf="heroes.length > 0" ...
 ```
 
 Ahora vamos a crear nuestro primer héroe, en la función ngOnInit de nuestro componente _ListadoDeHeroes_ (para más información consultar [aquí](https://v4.angular.io/guide/lifecycle-hooks)). Para ello vamos a incluir este código en `src/app/listado-de-heroes/listado-de-heroes.component.ts`:
@@ -382,6 +382,7 @@ export class HeroesService {
       );
     });
   }
+}
 ```
 
 Con esto ya existe un servicio de nuestra aplicación que provee la funcionalidad de obtener héroes del servicio de angular. Y este servicio lo vamos a utilizar desde el componente `ListadoDeHeroes` y para esto vamos a hacer varios cambios.
@@ -409,7 +410,7 @@ Ya no vamos a utilizar la lista de héroes definida en el componente _ListadoDeH
 Tenemos que reflejar este cambio en el template del componente _ListadoDeHeroes_, por lo que debemos editar el archivo `src/app/listado-de-heroes/listado-de-heroes.component.ts` y cambiar la variable usada en el `*ngFor`:
 
 ```
-    <a class="hero-entry" ... *ngFor="let heroe of heroesService.heroes" ...
+    <div class="hero-entry" ... *ngFor="let heroe of heroesService.heroes" ...
 ```
 
 Podemos revisar la aplicación desde cualquier navegador para ver los cambios en vivo.
@@ -496,8 +497,8 @@ export class HeroesService {
     }
 
     getHeroes (nameStartsWith?: string, page?: number) {
-        if (page) {
-        this.page = page;
+        if (page || page === 0) {
+          this.page = page;
         }
         const url = this.protocol + this.ApiUrl + 'characters?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b'
         + '&offset=' + (this.page * this.step)
