@@ -11,6 +11,8 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   public title = 'Tutorial de Angular - Héroes de Marvel';
   public searchString;
+  public focus_this = false
+  
   // The child component : spinner
   @ViewChild('spi') spinner;
   /* public heroes: Array<Heroe> = []; */

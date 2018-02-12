@@ -60,6 +60,8 @@ export class HeroesService {
 
   getTeamColor(id):string{
     if(this.teams.get(id)!=undefined){
+      console.log("teams");
+      console.log(this.teams);
       return this.teams.get(id);
     }
     else{

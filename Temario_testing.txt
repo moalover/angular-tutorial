@@ -1,0 +1,29 @@
+Testing Cookbook
+
+1.- Configuración: Karma. --listo
+2.- Test de componentes:
+    - Definir testbed  --listo
+    - Empaquetar en fixture  --listo
+    - Inicializar todo en beforeEach  --listo
+3- Mocking Services: hero-profile y listado-de-heroes
+    http://blog.danieleghidoli.it/2016/11/06/testing-angular-component-mock-services/ --listo
+    
+4- Async tests:
+    - Con spyOn voids(servicio)/mock services used inside(heroe-profile)---listo
+    - con XHRBackend mockbackend  ---listo
+        https://blog.thoughtram.io/angular/2016/11/28/testing-services-with-http-in-angular-2.html
+    - testAsync
+    - Nested promises/observables con spyon and callThrough.
+    - HTTPCLIENT tests: https://medium.com/netscape/testing-with-the-angular-httpclient-api-648203820712
+5.- Routing tests:
+    - Ignorar pruebas de route.params: --listo
+        https://stackoverflow.com/questions/43236811/angular-2-failed-cannot-read-property-replace-of-undefined-when-running-ng/46460899#46460899
+    - fakeAsync: 
+        https://angular-2-training-book.rangle.io/handout/testing/components/async.html
+        https://codecraft.tv/courses/angular/unit-testing/routing/
+    - mocking Router Class
+        https://semaphoreci.com/community/tutorials/testing-routes-in-angular-2
+    - mocking Location Class. --listo
+        https://keyholesoftware.com/2017/02/01/test-driven-angular-2-part-2/
+6.- Test de Classes:
+    Sólo asersiones.

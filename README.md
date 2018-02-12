@@ -978,5 +978,256 @@ Para hacer más rápido el trabajo, reemplazamos todo el bloque de botones con:
 Esperamos el curso haya resultado útil, por favor, nos serviría mucho si nos dan su feedback a través de este enlace: [ENCUESTA](https://form.jotformz.com/73514590034654).
 
 
+==============================================
 
 
+            TESTING WITH ANGULAR
+
+
+==============================================
+## 1 - CONFIGURANDO KARMA
+A fin de obtener los reportes necesarios de coverage de nuestra aplicación, debemos importar módulos de node en nuestra configuración de Karma. Para ello, en el archivo `karma.conf.js`, agregamos los siguientes módulos, previamente instalados con npm:
+```
+      require('phantomjs-prebuilt'),
+      require('karma-phantomjs-launcher'),
+      require('karma-chrome-launcher'),
+      require('karma-coverage'),
+
+```
+
+Si queremos ver nuestros resultados en forma gráfica podemos agregar en el atributo browsers, el navegador Chrome, de esta forma:
+```
+browsers: ['Chrome'],
+```
+También podemos usar el headless browser PhantomJS:
+```
+browsers: ['PhantomJS'],
+```
+
+Para que se generen los reportes gráficos, debemos agregar el siguiente flag
+```
+ng test --code-coverage
+```
+Si lo tenemos configurado en el package.json, agregarlo al atributo test.
+
+## 2 - PREPARAR EL COMPONENTE PARA REALIZAR LAS PRUEBAS
+Para empezar a implementar los tests unitarios, primero debemos realizar los imports necesarios en nuestro componente.
+
+1. Lo primero que debemos hacer es añadir la propiedad **schemas** en nuestro módulo de la aplicación, para ello abrimos `app.module.ts`, y agregamos específicamente:
+```
+//imports
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+....
+
+
+schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ]
+```
+Esto nos permitirá interpretar los componentes que estén embebidos en otro componente.
+
+Además debemos incluir estos **schemas** en el TestBed del componente que deseados probar. Para nuestro caso, empezaremos realizando pruebas unitarias para el componente **hero-profile.component.ts**. Abrimos el script e incluiremos lo siguiente:
+```
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AppComponent } from '../app.component';
+.....
+  // Dentro del TestBed configuration
+    schemas: [
+      CUSTOM_ELEMENTS_SCHEMA,
+      NO_ERRORS_SCHEMA
+    ],
+    declarations: [
+      AppComponent,
+      ModalPollComponent,
+      HeroProfileComponent
+    ],
+```
+
+Este componente inicializa ubicando un parámetro del url. Dado que nosotros no queremos comprobar eso,
+basta con que importemos el módulo de routing, que se encargará de indicar que la ruta a la que se quiere acceder existe. Por tanto, agregamos:
+
+```
+import {RouterTestingModule} from '@angular/router/testing';
+....
+
+imports: [
+  RouterTestingModule
+],
+```
+
+Por último, añadimos los providers:
+```
+providers: [
+  { provide: ComponentFixtureAutoDetect, useValue: true },
+  { provide: HeroesService, useClass: HeroServiceMock }
+]
+```
+
+El primero nos servirá para crear fixtures de nuestros componentes. Empaquetan nuestro componente para darle más capacidades de testing.
+El segundo es una Emulación del servicio (MockService) que se usa al inicializar el componente. Para hacer un MockService hacemos lo siguiente:
+ - Creamos la clase que hara el mock del servicio, declarando todos los métodos del servicio que se usan en el componente:
+ ```
+ let heroesService: HeroesService;
+  const HEROE_OBJECT ={
+    id:'1',
+    name:'Spiderman',
+    description: 'El hombre que araña',
+    modified:new Date(1518417160),
+    thumbnail:
+    {
+    'path': 'https://i.pinimg.com/originals/c2/93/56/c293563aa553250601d8cb768c044d4b',
+    'extension': 'jpg'
+    },
+    resourceURI:'http://gateway.marvel.com/v1/public/characters/1011334',
+    teamColor:'yellow'};
+  
+ class HeroServiceMock {
+    public teams = new Map().set("1","yellow");
+
+    public getHeroe(){
+      return Observable.of({data:{results:HEROE_OBJECT}}).delay(1000);
+    }
+
+    public getTeamColor(){
+      return "yellow";
+    }
+  }
+ ``` 
+ Las funciones que retornan Observables deben retornar Observables con el método of y agregando el json del objeto esperado. Es buena recomendación agregar el delay a fin de que se obtengan todos los datos que se manipularán luego en el cuerpo del subscribe.
+
+ - Luego se debe inicializar este MockService en algún beforeEach:
+ ``` 
+ heroesService = TestBed.get(HeroesService);
+ ``` 
+
+ - Por último, se debe realizar el spec de la siguiente forma. Se hace un spyOn sobre el método que se creo en el mockService y callThrough asegurará que se lleve a cabo el cuerpo del subscribe. Cómo esta función se invocó desde el hook OnInit, también se debe indicar en el componente. Finalmente, nos aseguramos que la función del mockService, sea llamada.
+
+ ``` 
+ it('Debería crear el heroe', () => {
+    spyOn(heroesService, 'getHeroe').and.callThrough();
+    component.ngOnInit();
+    expect(heroesService.getHeroe).toHaveBeenCalled();
+  });  
+``` 
+
+## 3 - PREPARAR EL SERVICIO PARA REALIZAR LAS PRUEBAS
+De la misma forma que realizamos los imports necesarios para el componente, necesitaremos agregar los providers necesarios para las librerías que estén siendo usadas en el servicio. En particular, el servicio HttpClient. Para ello, añadimos lo siguiente en 'heroes.service.ts':
+``` 
+//imports
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+.....
+beforeEach(() => {
+    TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [HeroesService]
+    });
+      service = TestBed.get(HeroesService);
+  });
+
+  afterEach(() => { 
+      service = null;
+  });
+``` 
+
+## 4 - TEST DE FUNCIONES QUE RETORNAN VOID
+Para probar funciones que retornan void, basta con un usar un spyOn de forma tal que se emule la función que se quiere probar, asegurando el resultado. Vamos a valernos del servicio ´heroes.service.ts´ para realizar esta prueba, por tanto agregamos:
+
+```
+it('should test getHeroes function', () => {
+    spyOn(service, 'getHeroes').and.callThrough();
+    service.getHeroes();
+    expect(service.getHeroes).toHaveBeenCalled();
+    expect(service.heroes).toBeDefined();
+});
+```
+
+## 5 - TEST DE FUNCIONES QUE RETORNAN OBSERVABLE
+Siguiendo nuestro ejemplo del ´hero.service.ts´, vamos a realizar la prueba del método getHeroe, que retorna un Observable. Para ello nos valdremos de la clase MockBackend, que nos permitirá emular la respuesta. Para ello agregamos en los providers, la siguiente clase:
+```
+//imports
+import { MockBackend } from '@angular/http/testing';
+.....
+providers: [
+  HeroesService,
+  {provide: XHRBackend, useClass: MockBackend}
+]
+```
+
+Esto nos disponibiliza la clase para posteriormente emular la respuesta de esa función en un spec:
+```
+it('should test getHeroe function',
+    inject([HeroesService, XHRBackend], (hservice, mockBackend) => {  - 1 -
+    const mockResponse = { - 2 -
+      results:
+          {
+            id:'1',
+            name:'Spiderman1',
+            description: 'El hombre que araña',
+            modified:new Date(1518417160),
+            thumbnail:
+            {
+            'path': 'https://i.pinimg.com/originals/c2/93/56/c293563aa553250601d8cb768c044d4b',
+            'extension': 'jpg'
+            },
+            resourceURI:'http://gateway.marvel.com/v1/public/characters/1011334',
+            teamColor:'yellow'
+          }
+    };
+
+    mockBackend.connections.subscribe((connection) => {  - 3 -
+      connection.mockRespond(new Response(new ResponseOptions({
+        body: {data: JSON.stringify(mockResponse)}
+      })));
+    });
+    
+    hservice.getHeroe('1').subscribe((heroe) => {  - 4 -
+      expect(heroe.data.results.length).toBe(1);
+      expect(heroe.data.results[0].name).toEqual('Spiderman1');
+    });
+  }));
+```
+Los pasos explicados a continuación:
+1- Inyectamos el servicio real y el interface de MockBackend, XHRBackend.
+2.- Creamos el objeto que se usará como respuesta del servicio http.
+3.- Suscribimos el objeto creado al objeto MockResponse.
+4.- Invocamos la función y realizamos las asersiones correspondientes.
+
+## 6 - EMULANDO EL SERVICIO LOCATION
+Para este tipo de pruebas, revisaremos la función goBack(), del componente ´hero-profile.component.ts´. Para comprobar la correctitud de esa función, debemos emular el servicio location a través de una clase:
+```
+class LocationMock {
+  back():void {}
+}
+
+{ provide: Location, useClass: LocationMock},
+```
+
+Luego la asersión, será la siguiente:
+```
+it('Se debe llamar a la función go back', inject([Location], (loc: Location) => {
+    const spy = spyOn(loc, 'back');
+    component.goBack();
+    expect(spy).toHaveBeenCalled();
+}));
+```
+
+## 7 - REALIZANDO TEST UNITARIOS A CLASSES
+Basta con realizar un spec sobre el método constructor de esta forma:
+```
+import { Heroe } from './heroe';
+describe('Test diccionarioDatos getters and setters.', () => { 
+    it("diccionarioDatos's dummy var is true", () => {
+        let id: string = "1";
+        let name: string = 'Spiderman';
+        let description: string = 'El hombre que araña';
+        let modified: Date = new Date(1518417160);
+        let thumbnail: Object = {
+            'path': 'https://i.pinimg.com/originals/c2/93/56/c293563aa553250601d8cb768c044d4b',
+            'extension': 'jpg'
+        };
+        let resourceURI: string = 'http://gateway.marvel.com/v1/public/characters/1011334';
+        let teamColor: string = "yellow";
+        const heroe = new Heroe(id,name,description,modified,thumbnail,resourceURI, teamColor);
+        expect(heroe).toBeTruthy(); 
+    });
+
+});
+```
