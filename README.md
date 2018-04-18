@@ -1003,12 +1003,31 @@ También podemos usar el headless browser PhantomJS:
 ```
 browsers: ['PhantomJS'],
 ```
+Por su parte, para hacer uso de Headless Chrome, debemos instalar la librería puppeteer, que nos provee de una API para controlar el browser Chrome con las capacidades en Headless. Para ello hacemos, en la raíz de nuestro proyecto:
 
-Para que se generen los reportes gráficos, debemos agregar el siguiente flag
 ```
-ng test --code-coverage
+npm install --save puppeteer
 ```
-Si lo tenemos configurado en el package.json, agregarlo al atributo test.
+
+Seguidamente, en el archivo karma `karma.conf.js`, inicializamos la librería, agregando esta línea al inicio del archivo:
+```
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+```
+Por último, reemplazamos el atributo browsers, con lo siguiente:
+```
+  browsers: ['HeadlessChrome'],
+    customLaunchers:{
+      HeadlessChrome:{
+          base: 'ChromeHeadless',
+          flags: ['--no-sandbox']
+      }
+    },
+```
+
+Para que se generen los reportes gráficos, debemos agregar el siguiente flag, en la definición del script test en el archivo `package.json` . Por su parte, el flag --no-watch, permite que termine la ejecución de la prueba:
+```
+ng test --code-coverage --no-watch
+```
 
 ## 2 - PREPARAR EL COMPONENTE PARA REALIZAR LAS PRUEBAS
 Para empezar a implementar los tests unitarios, primero debemos realizar los imports necesarios en nuestro componente.
