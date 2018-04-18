@@ -3,6 +3,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import { Heroe } from '../classes/heroe';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
+import { CapitalizePipe } from '../capitalize.pipe';
 
 //schemas
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -18,7 +19,7 @@ describe('HeroProfileComponent', () => {
   let component: HeroProfileComponent;
   let fixture: ComponentFixture<HeroProfileComponent>;
   let heroesService: HeroesService;
-  const HEROE_OBJECT ={
+  const HEROE_OBJECT =[{
     id:'1',
     name:'Spiderman',
     description: 'El hombre que araña',
@@ -30,7 +31,7 @@ describe('HeroProfileComponent', () => {
     },
     resourceURI:'http://gateway.marvel.com/v1/public/characters/1011334',
     teamColor:'yellow'
-  };
+  }];
   
   
   class HeroServiceMock {
@@ -58,7 +59,8 @@ describe('HeroProfileComponent', () => {
       declarations: [
         AppComponent,
         ModalPollComponent,
-        HeroProfileComponent
+        HeroProfileComponent,
+        CapitalizePipe
       ],
       imports: [
         RouterTestingModule
@@ -95,8 +97,19 @@ describe('HeroProfileComponent', () => {
   });
 
   it('Debería crear el heroe', () => {
-    spyOn(heroesService, 'getHeroe').and.callThrough();
+    //Arrange
+    const spy = spyOn(heroesService, 'getHeroe').and.callThrough();
+    /*const spy = spyOn(heroesService, 'getHeroe').and.callFake(() => {
+      Observable.of({data:{results:HEROE_OBJECT}}).subscribe((data) => {
+        const temp = data.data.results[0];
+        component.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,heroesService.getTeamColor(temp.id));
+        component.team = component.heroe.teamColor;
+      });
+    });*/
+    
+    //Act
     component.ngOnInit();
+    //Assert
     expect(heroesService.getHeroe).toHaveBeenCalled();
   });  
 
@@ -108,6 +121,25 @@ describe('HeroProfileComponent', () => {
     const spy = spyOn(loc, 'back');
     component.goBack();
     expect(spy).toHaveBeenCalled();
-}));
+  }));
+
+  it('should recognize a modal', async(() => {
+    fixture.detectChanges();
+    const modalchild: ModalPollComponent = fixture.componentInstance.modal;
+    expect(modalchild).toBeDefined();
+    const qm = "¿Dónde ubicarías a tu súper héroe?";
+    component.question_modal = qm;
+    component.launchModal();
+    expect(component).toBeDefined();
+  }));
+
+  it('deberia llamar a getTeam', inject([HeroesService], (heroesService: HeroesService) => {
+    const t = "verde";
+    const id = 1231;
+    component.team = t;
+    heroesService.teams.set(id,t);
+    component.getTeam(id);
+    expect(heroesService.teams.size).toEqual(2);
+  }));
   
 });

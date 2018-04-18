@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Heroe } from '../classes/heroe';
 import { HeroesService } from '../heroes.service';
+import { Router } from '@angular/router';
+import { CapitalizePipe } from '../capitalize.pipe';
 
 @Component({
   selector: 'app-listado-de-heroes',
@@ -17,7 +19,7 @@ export class ListadoDeHeroesComponent implements OnInit {
   @ViewChild('spi') spinner;
   /* public heroes: Array<Heroe> = []; */
 
-  constructor(private heroesService: HeroesService) { }
+  constructor(private heroesService: HeroesService, private router:Router) { }
 
   submitSearch() {
     this.heroesService.resetPager();
@@ -30,6 +32,10 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   nextPage() {
     this.heroesService.getHeroes(this.searchString, this.heroesService.page + 1);
+  }
+
+  go_to(id){
+    this.router.navigateByUrl('/heroe/'+id);
   }
 
   ngOnInit() {

@@ -1,7 +1,11 @@
-import { async, ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, ComponentFixtureAutoDetect, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import { Heroe } from '../classes/heroe';
 import { Observable } from 'rxjs';
+import { Router, Routes} from '@angular/router';
+import { AppRoutingModule } from '../app-routing.module';
+import { CapitalizePipe } from '../capitalize.pipe';
+
 
 //schemas
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,11 +18,20 @@ import { ModalPollComponent } from '../modal-poll/modal-poll.component';
 
 
 import { ListadoDeHeroesComponent } from './listado-de-heroes.component';
+import { Location } from '@angular/common';
 
 describe('ListadoDeHeroesComponent', () => {
   let component: ListadoDeHeroesComponent;
   let fixture: ComponentFixture<ListadoDeHeroesComponent>;
   let heroesService: HeroesService;
+  let router: Router;
+
+  const routes: Routes = [
+    { path: 'listado-heroes', component: ListadoDeHeroesComponent},
+    { path: 'heroe/:id', component: HeroProfileComponent},
+    { path: 'modal-poll', component: ModalPollComponent},
+    { path: '**', redirectTo: '/listado-heroes'}
+  ];
   const HEROES_OBJECT =[
     {
       id:'1',
@@ -60,12 +73,23 @@ describe('ListadoDeHeroesComponent', () => {
   
   
   class HeroServiceMock {
+    page;
     public getHeroes(){
       return Observable.of({data:{results:HEROES_OBJECT}}).delay(1000);
     }
+    resetPager() {
+      const he = new HeroServiceMock();
+      he.page = 0;
+    }
+  
   }
-
+  class RouterStub {
+    navigateByUrl(url: string):string {
+        return url;
+    }
+  }
   beforeEach(async(() => {
+    
     TestBed.configureTestingModule({
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
@@ -74,17 +98,19 @@ describe('ListadoDeHeroesComponent', () => {
       declarations: [
         AppComponent,
         ModalPollComponent,
-        ListadoDeHeroesComponent
+        ListadoDeHeroesComponent,
+        HeroProfileComponent,
+        CapitalizePipe
       ],
-      imports: [
-        RouterTestingModule
-      ],
+      imports: [RouterTestingModule],
       providers: [
         { provide: ComponentFixtureAutoDetect, useValue: true },
-        { provide: HeroesService, useClass: HeroServiceMock }
+        { provide: HeroesService, useClass: HeroServiceMock },
+        { provide: Router, useClass: RouterStub},
       ]
     })
-      .compileComponents();
+    .compileComponents();
+      
   }));
 
   beforeEach(() => {
@@ -92,6 +118,11 @@ describe('ListadoDeHeroesComponent', () => {
     component = fixture.componentInstance;
     heroesService = TestBed.get(HeroesService);
     fixture.detectChanges();
+    component.searchString = "spider";
+  });
+
+  it('Componente debería estar Creada', () => {
+    expect(component).toBeDefined();
   });
 
   it('Debería traer el listado de heroes', () => {
@@ -100,7 +131,25 @@ describe('ListadoDeHeroesComponent', () => {
     expect(heroesService.getHeroes).toHaveBeenCalled();
   });  
 
-  it('Componente debería estar Creada', () => {
-    expect(component).toBeDefined();
-  });
+  it('Debería invocar submitSearch', () => {
+    spyOn(heroesService, 'resetPager').and.callThrough();
+    spyOn(heroesService, 'getHeroes').and.callThrough();
+    component.submitSearch();
+    expect(heroesService.getHeroes).toHaveBeenCalled();
+  });  
+  
+  
+  it('Debería invocar go_to', inject([Router], (router: Router) => {
+    const spy = spyOn(router, 'navigateByUrl').and.callThrough();
+
+    component.go_to(1);
+
+    const url = spy.calls.first().args[0];
+
+    expect(url).toBe('/heroe/1');
+}));
+
+
+  
 });
+

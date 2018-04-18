@@ -10,6 +10,7 @@ import { HeroesService } from './heroes.service';
 import { HeroProfileComponent } from './hero-profile/hero-profile.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ModalPollComponent } from './modal-poll/modal-poll.component';
+import { CapitalizePipe } from './capitalize.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ModalPollComponent } from './modal-poll/modal-poll.component';
     ListadoDeHeroesComponent,
     HeroProfileComponent,
     SpinnerComponent,
-    ModalPollComponent
+    ModalPollComponent,
+    CapitalizePipe
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,7 @@ import { ModalPollComponent } from './modal-poll/modal-poll.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [HeroesService],
+  providers: [HeroesService, CapitalizePipe],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ]
 })

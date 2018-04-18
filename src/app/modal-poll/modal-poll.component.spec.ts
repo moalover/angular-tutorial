@@ -17,9 +17,18 @@ describe('ModalPollComponent', () => {
     fixture = TestBed.createComponent(ModalPollComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.show_modal= false;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should test send_team with "green" choice', () => {
+    const color = "verde";
+    component.setTeam.subscribe(col => expect(col).toEqual("verde"));
+    component.send_team(color);
+    expect(component.show_modal).toBe(true);
+  });
+  
 });

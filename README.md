@@ -1062,7 +1062,7 @@ providers: [
 ```
 
 El primero nos servirá para crear fixtures de nuestros componentes. Empaquetan nuestro componente para darle más capacidades de testing.
-El segundo es una Emulación del servicio (MockService) que se usa al inicializar el componente. Para hacer un MockService hacemos lo siguiente:
+[FUENTE](http://blog.danieleghidoli.it/2016/11/06/testing-angular-component-mock-services/) El segundo es una Emulación del servicio (MockService) que se usa al inicializar el componente. Para hacer un MockService hacemos lo siguiente:
  - Creamos la clase que hara el mock del servicio, declarando todos los métodos del servicio que se usan en el componente:
  ```
  let heroesService: HeroesService;

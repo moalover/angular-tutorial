@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CapitalizePipe } from '../capitalize.pipe';
 
 import { Heroe } from '../classes/heroe';
 import { HeroesService } from '../heroes.service';
@@ -39,10 +40,10 @@ export class HeroProfileComponent implements OnInit {
   }
 
   getTeam(team):void{
-    console.log("Color: "+team);
     this.team = team;
     this.heroesService.teams.set(this.heroe.id, this.team);
   }
+  
 
   launchModal():void{
     this.question_modal="¿Dónde ubicarías a tu súper héroe?";

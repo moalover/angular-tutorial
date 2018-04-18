@@ -1,6 +1,7 @@
 import { Heroe } from './heroe';
-describe('Test diccionarioDatos getters and setters.', () => { 
-    it("diccionarioDatos's dummy var is true", () => {
+describe('Test heroes', () => { 
+    it("heroe object is defined", () => {
+        //Arrange
         let id: string = "1";
         let name: string = 'Spiderman';
         let description: string = 'El hombre que araña';
@@ -11,7 +12,9 @@ describe('Test diccionarioDatos getters and setters.', () => {
         };
         let resourceURI: string = 'http://gateway.marvel.com/v1/public/characters/1011334';
         let teamColor: string = "yellow";
+        //Act
         const heroe = new Heroe(id,name,description,modified,thumbnail,resourceURI, teamColor);
+        //Assert
         expect(heroe).toBeTruthy(); 
     });
 

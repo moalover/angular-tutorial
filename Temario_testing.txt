@@ -12,9 +12,10 @@ Testing Cookbook
     - Con spyOn voids(servicio)/mock services used inside(heroe-profile)---listo
     - con XHRBackend mockbackend  ---listo
         https://blog.thoughtram.io/angular/2016/11/28/testing-services-with-http-in-angular-2.html
-    - testAsync
+    - fakeAsync para routing: https://codecraft.tv/courses/angular/unit-testing/routing/
     - Nested promises/observables con spyon and callThrough.
     - HTTPCLIENT tests: https://medium.com/netscape/testing-with-the-angular-httpclient-api-648203820712
+                        https://medium.com/spektrakel-blog/angular-testing-snippets-httpclient-d1dc2f035eb8
 5.- Routing tests:
     - Ignorar pruebas de route.params: --listo
         https://stackoverflow.com/questions/43236811/angular-2-failed-cannot-read-property-replace-of-undefined-when-running-ng/46460899#46460899

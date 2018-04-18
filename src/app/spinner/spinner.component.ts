@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HeroesService } from '../heroes.service';
+import { CapitalizePipe } from '../capitalize.pipe';
 
 @Component({
   selector: 'spinner',
@@ -7,14 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class SpinnerComponent implements OnInit {
-  show_spinner: boolean = false;
-
-  constructor() { }
+  constructor(private heroesService: HeroesService,) { }
 
   ngOnInit() {
-  }
-
-  toggle_spinner(): void {
-    this.show_spinner = !this.show_spinner;
+    
   }
 }

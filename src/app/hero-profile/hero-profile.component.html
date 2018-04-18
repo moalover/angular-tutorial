@@ -1,5 +1,5 @@
 <ng-container *ngIf="heroe">
-  <h1 class="text-center">{{heroe.name}}</h1>
+  <h1 class="text-center">{{heroe.name | capitalize}}</h1>
   <a class="goback" (click)="goBack()">Atrás</a>
   <div class="row" class="heroe-profile">
 

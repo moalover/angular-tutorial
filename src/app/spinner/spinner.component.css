@@ -1,13 +1,15 @@
 .spinner-background{
     background-image: url(/assets/img/loading_img.jpg);
-    background-repeat: round;
     height: 100%;
     width: 100%;
-    overflow: hidden;            
+    overflow: hidden;
     margin: 0;
     padding: 0;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 12345;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
 }
+

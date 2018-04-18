@@ -20,7 +20,7 @@ export class HeroesService {
   
   public teams = new Map();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient){}
 
   resetPager() {
     this.page = 0;

@@ -7,6 +7,7 @@ import { MockBackend } from '@angular/http/testing';
 
 describe('HeroesService', () => {
   let service: HeroesService;
+  let routMock;
   class RouterStub {
     navigateByUrl(url: string) {
         return url;
@@ -18,6 +19,9 @@ describe('HeroesService', () => {
   }
 
   beforeEach(() => {
+    routMock = {
+      navigate: jasmine.createSpy("navigate")
+    };
     TestBed.configureTestingModule({
         imports: [HttpClientModule, HttpClientTestingModule],
         providers: [
@@ -69,7 +73,15 @@ describe('HeroesService', () => {
     service.getHeroes();
     expect(service.getHeroes).toHaveBeenCalled();
     expect(service.heroes).toBeDefined();
-});
+  });
+
+  it('deberia testear reset Pager ', () => {
+    const pager = 0;
+    service.page = pager;
+    service.resetPager();
+    expect(service).toBeTruthy();
+  });
+
 
   it('should test getHeroe function',
     inject([HeroesService, XHRBackend], (hservice, mockBackend) => {
@@ -102,35 +114,19 @@ describe('HeroesService', () => {
     });
   }));
 
-  it('test getTeamColor function', function() {
+  it('test getTeamColor function yes', function() {
     spyOn(service, 'getTeamColor').and.callThrough();
     service.teams = new Map().set("1","green");
     service.getTeamColor("1");
     expect(service.getTeamColor).toHaveBeenCalled();
     expect(service.getTeamColor).toBeDefined();
     expect(service.teams.get("1")).toBe("green");
-  })
+  });
+
+  it('test getTeamColor function no', function() {
+    spyOn(service, 'getTeamColor').and.callThrough();
+    service.getTeamColor(undefined);
+    expect(service.teams.get(undefined)).toBeFalsy();
+  });
   
-  /*it('if discipline is null', function() {
-    vm.selectedDisciplineCode = '';
-    vm.onDisciplineCodeChange();
-    var result = {
-      code: null,
-      userDefined: false,
-      userDefinedDiscipline: null
-    };
-    expect(vm.selectedDiscipline).toBe(result);
-  })
-  
-  
-  it('if discipline is different', function() {
-    vm.selectedDisciplineCode = 'nothing';
-    vm.onDisciplineCodeChange();
-    var result = {
-      code: vm.selectedDisciplineCode,
-      userDefined: false,
-      userDefinedDiscipline: null
-    };
-    expect(vm.selectedDiscipline).toBe(result);
-  })*/
 });
