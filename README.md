@@ -1024,7 +1024,7 @@ Por último, reemplazamos el atributo browsers, con lo siguiente:
     },
 ```
 
-Para que se generen los reportes gráficos, debemos agregar el siguiente flag, en la definición del script test en el archivo `package.json` . Por su parte, el flag --no-watch, permite que termine la ejecución de la prueba:
+Para que se generen los reportes gráficos, debemos agregar el siguiente flag `--code-coverage`, en la definición del script test en el archivo `package.json` . Por su parte, el flag `--no-watch`, permite que termine la ejecución de la prueba:
 ```
 ng test --code-coverage --no-watch
 ```
@@ -1041,9 +1041,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ]
 ```
-Esto nos permitirá interpretar los componentes que estén embebidos en otro componente.
+Esto nos permitirá interpretar los tags html provenientes de componentes que estén embebidos en otro componente.
 
-Además debemos incluir estos **schemas** en el TestBed del componente que deseados probar. Para nuestro caso, empezaremos realizando pruebas unitarias para el componente **hero-profile.component.ts**. Abrimos el script e incluiremos lo siguiente:
+Además debemos incluir estos **schemas** en el TestBed del componente que deseamos probar. Para nuestro caso, empezaremos realizando pruebas unitarias para el componente **hero-profile.component.ts**. Abrimos el script e incluiremos lo siguiente:
 ```
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { AppComponent } from '../app.component';
@@ -1249,4 +1249,60 @@ describe('Test diccionarioDatos getters and setters.', () => {
     });
 
 });
+```
+## 8 - REALIZANDO TEST UNITARIOS A PIPES
+Como ya sabemos, para que un pipe funcione correctamente, debe estar incluido en todos los componentes relacionados al componente que hace uso del mismo. Sin embargo, al momento de hacer test unitario sobre un componente que use un pipe en específico, bastará con incluirlo en los declarations del Testbed en cuestión. 
+
+Para el caso del componente `hero-profile.component.ts`, que hace uso del pipe CapitalizePipe, importamos el pipe:
+```
+import { CapitalizePipe } from '../capitalize.pipe'; 
+```
+y adicionalmente, lo agregamos en los declarations del Testbed:
+```
+declarations: [
+    AppComponent,
+    ModalPollComponent,
+    HeroProfileComponent,
+    CapitalizePipe
+  ],
+```
+
+Pero ahora, si lo que queremos es probar el pipe en sí, podemos optar por este código, ingresandolo en el archivo `capitalize.pipe.spec.ts`:
+```
+import { CapitalizePipe } from './capitalize.pipe';
+import { TestBed, inject, async } from '@angular/core/testing';
+
+describe('CapitalizePipe', () => {
+  let pipe;
+  
+  //setup
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [ CapitalizePipe ]
+  }));
+  
+  beforeEach(inject([CapitalizePipe], (p:CapitalizePipe) => {
+    pipe = p;
+  }));
+  
+  //specs
+  it('crea la instancia', () => {
+    expect(pipe).toBeTruthy();
+  });
+
+  it('debería funcionar con un string vacío', () => {
+    expect(pipe.transform('')).toEqual('');
+  });
+  
+  it('debería realizar la transformación de Capitalize', () => {
+    expect(pipe.transform('wow')).toEqual('WOW');
+  });
+  
+  it('debería lanzar error por valores inválidos', () => {
+    //must use arrow function for expect to capture exception
+    expect(()=>pipe.transform(undefined)).toThrow();
+    expect(()=>pipe.transform()).toThrow();
+    expect(()=>pipe.transform()).toThrowError('No hay un string que transformar');
+  });
+});
+
 ```

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Heroe } from '../classes/heroe';
 import { HeroesService } from '../heroes.service';
 import { Router } from '@angular/router';
-import { CapitalizePipe } from '../capitalize.pipe';
+//import { CapitalizePipe } from '../capitalize.pipe';
 
 @Component({
   selector: 'app-listado-de-heroes',

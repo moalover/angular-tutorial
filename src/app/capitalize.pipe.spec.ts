@@ -9,27 +9,27 @@ describe('CapitalizePipe', () => {
     providers: [ CapitalizePipe ]
   }));
   
-  beforeEach(inject([CapitalizePipe], p => {
+  beforeEach(inject([CapitalizePipe], (p:CapitalizePipe) => {
     pipe = p;
   }));
   
   //specs
-  it('create an instance', () => {
+  it('crea la instancia', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should work with empty string', () => {
+  it('debería funcionar con un string vacío', () => {
     expect(pipe.transform('')).toEqual('');
   });
   
-  it('should capitalise', () => {
+  it('debería realizar la transformación de Capitalize', () => {
     expect(pipe.transform('wow')).toEqual('WOW');
   });
   
-  it('should throw with invalid values', () => {
+  it('debería lanzar error por valores inválidos', () => {
     //must use arrow function for expect to capture exception
     expect(()=>pipe.transform(undefined)).toThrow();
     expect(()=>pipe.transform()).toThrow();
-    expect(()=>pipe.transform()).toThrowError('Requires a String as input');
+    expect(()=>pipe.transform()).toThrowError('No hay un string que transformar');
   });
 });

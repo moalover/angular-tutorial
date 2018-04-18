@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroesService } from '../heroes.service';
-import { CapitalizePipe } from '../capitalize.pipe';
+//import { CapitalizePipe } from '../capitalize.pipe';
 
 @Component({
   selector: 'spinner',

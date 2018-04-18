@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { CapitalizePipe } from '../capitalize.pipe';
+//import { CapitalizePipe } from '../capitalize.pipe';
 
 @Component({
   selector: 'app-modal-poll',
