@@ -857,19 +857,24 @@ El primer paso para realizar esto es crear en `src/app/modal-poll/modal-poll.com
 
 ```
 
-También será necesario incluir una función que llene esa variable, de forma tal que le permita empaquetarla y enviarla en la forma de un evento. Para esto en el mismo archivo que editamos anteriormente, hacemos:
+También será necesario incluir una función que permitar emitir el string como un evento. Para esto en el mismo archivo que editamos anteriormente, agregamos:
 
 ```
 send_team(team: string): void {
     this.setTeam.emit(team);
     this.toggle_modal();
-  }
+}
 ```
 Luego en el html, `src/app/modal-poll/modal-poll.component.html`, asociamos la función recién creada a un evento click. Lo que ocurrirá aquí es que desde la interfaz se mandará el string *azul* como evento, una vez sea clickado ese botón:
 ```
 <div class="group bg-blue to_the_left" (click)="send_team('azul')">Azul</div>
 ```
-Lo que necesitamos ahora es preparar al componente padre para recibir tal evento, por tanto, en `src/app/hero-profile/hero-profile.component.ts`, creamos una variable que recibirá el team y la función que manipulará esa información guardada en *team*:
+Debemos hacer esto con cada uno de los botones creados:
+<div class="group bg-blue to_the_left" (click)="send_team('verde')">Verde</div>
+<div class="group bg-blue to_the_left" (click)="send_team('violet')">Violeta</div>
+<div class="group bg-blue to_the_left" (click)="send_team('naranjo')">Naranjo</div>
+
+Lo que necesitamos ahora es preparar al componente padre para que reaccione a tal evento, por tanto, en `src/app/hero-profile/hero-profile.component.ts`, hacemos lo siguiente:
 ```
 public team:string = "";
 ....
@@ -898,14 +903,14 @@ Se crea la función que buscará si el superheroe tiene equipo:
 ```
   getTeamColor(id):string{
       if(this.teams.get(id)!=undefined){
-      return this.teams.get(id);
+        return this.teams.get(id);
       }
       else{
-      return "";
+        return "";
       }
   }
 ```
-Y se coloca en la construcción inicial de todos los héroes para que pinte el color del equipo al que se le asignó:
+Y se coloca en la construcción inicial del arreglo de héroes, la invocación a esa función para asignarle al heroe el color de team seleccionado:
 ```
 new Heroe(
     result.id,
@@ -918,19 +923,19 @@ new Heroe(
   )
 ```
 
-Regresamos al componente padre. Nos falta establecer el binding desde el html del componente padre, es decir, recibir la información a través del objeto $event, para ello en el archivo `src/app/hero-profile/hero-profile.component.ts`, agregamos este atributo sobre el selector del componente hijo, quedando de esta forma:
+Después de realizar lo anterior en el servicio, regresamos al componente heroe-profile (padre). Nos falta establecer el binding desde el html del componente padre, es decir, recibir la información a través del objeto $event. Para ello en el archivo `src/app/hero-profile/hero-profile.component.html`, agregamos este atributo sobre el selector del componente hijo, quedando de esta forma:
 ```
 <modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" #modal></modal-poll>
 ```
 
-*setTeam* es la función del componente hijo que emitirá el evento que guarda el equipo que se eligió. Y *getTeam* guardará el payload de lo que retorna la primera función, que básicamente es un evento $event.
+El atributo *setTeam* hace referencia al EventEmitter del componente modal que envía el evento(color que se eligió). Y *getTeam* es el handler de ese evento en el componente de heroe-profile (padre). *$event* finalmente, contiene el string con el color que se eligió.
 
-De igual forma, ya podremos ver en el componente padre la selección que se realiza en el modal. Para comprobarlo, agregamos, en el mismo html, esta línea de código para ver el valor:
+De esta forma, ya podremos ver en el componente padre la selección que se realizó en el modal. Para comprobarlo, agregamos, en el mismo html, esta línea de código para ver el valor:
 ```
 <p *ngIf="team!=undefined && team!=''">Acabas de clasificar a tu heroe en el equipo <b [style.color]="heroesService.group_colors[team]">{{team}}</b></p>
 ```
 
-Este cambio a su vez nos servirá para que se evidencie la elección del equipo en el listado externo. Para ello basta agregar en el archivo
+Ahora bien, para reflejar la elección del team realizada,  en el listado de héroes debemos agregar en el archivo
 `src/app/listado-de-heroes/listado-de-heroes.component.html`, las siguientes líneas:
 
 ```
@@ -938,7 +943,7 @@ Este cambio a su vez nos servirá para que se evidencie la elección del equipo 
       <span>{{heroe.name}}</span>
     </a>
 ```
-Nos dirigimos al selector a, que contiene el id y thumbnail de la foto del héroe. Como podemos ve, el atributo que agregamos fue:
+Nos dirigimos al tag *anchor*, que contiene el id y thumbnail de la foto del héroe. Como podemos ver, el atributo que agregamos fue:
 ```
 [style.border-color]="heroesService['group_colors'][heroe.teamColor]" 
 ```
