@@ -83,7 +83,7 @@ La forma más sencilla de ejecutar una aplicación para hacer pruebas y desarrol
 
 ¿que está pasando cuando ejecutamos este comando?:
 
-- Se carga la configuración definida en el archivo .angular-cli.json.
+- Se carga la configuración definida en el archivo angular.json.
 - Se ejecuta Webpack para construir y empaquetar todo el código en JavaScript y CSS.
 - Se inicia el Webpack Dev Server en el puerto 4200.
 - Con el flag --open, se abrirá automáticamente una ventana del navegador con la aplicación corriendo. Es un flag opcional, que si no queremos que ocurra este comportamiento, podemos omitirlo.
@@ -145,7 +145,7 @@ export class AppRoutingModule { }
 
 ```
 
-El arreglo `routes` (que por los momenos está vacío) es una lista de rutas, estas rutas no son más que objetos en JavaScript similares a:
+El arreglo `routes` (que por los momentos está vacío) es una lista de rutas, estas rutas no son más que objetos en JavaScript similares a:
 
 ```
 {
@@ -215,7 +215,7 @@ Vamos a instalar el paquete de bootstrap mediante _npm_:
 > npm install --save bootstrap
 ```
 
-Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_modules/bootstrap/dist/css/bootstrap.min.css`, ahora solo tenemos que configurar Angular CLI para que incluya este archivo de forma automática en nuestra aplicación, para esto editamos el archivo `.angular-cli.json` en la raiz de nuestra aplicación:
+Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_modules/bootstrap/dist/css/bootstrap.min.css`, ahora solo tenemos que configurar Angular CLI para que incluya este archivo de forma automática en nuestra aplicación, para esto editamos el archivo `angular.json` (Para Angular 2 a 5 llamado .angular-cli.json) en la raiz de nuestra aplicación:
 
 ```
 …
