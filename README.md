@@ -327,7 +327,19 @@ Vamos a utilizar _Angular CLI_ para crear un servicio dentro de nuestra aplicaci
 > ng g service Heroes -m app.module.ts
 ```
 
-Nótese los archivos creados y los cambios en app.module.ts.
+Para utilizarlo solo nos queda agregarlo a nuestro módulo principal `src/app/app.module.ts`:
+
+´´´
+...
+import { HeroesService } from './heroes.service';
+...
+
+@NgModule({
+  ...
+  providers: [HeroesService],
+  ...
+})
+´´´
 
 La idea de este nuevo servicio es crear un canal de comunicación con un servicio web, en este caso el [API público de Marvel](https://developer.marvel.com/). Y el servicio ha de proveer esta funcionalidad de forma sencilla y reusable al resto de la aplicación.
 
