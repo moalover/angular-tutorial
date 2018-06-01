@@ -987,7 +987,7 @@ Para hacer más rápido el trabajo, reemplazamos todo el bloque de botones con:
                   </div>
 ```
 
-Esperamos el curso haya resultado útil, por favor, nos serviría mucho si nos dan su feedback a través de este enlace: [ENCUESTA](https://form.jotformz.com/73514590034654).
+Esperamos el curso haya resultado útil, por favor, nos serviría mucho si nos dan su feedback a través de este enlace: [ENCUESTA](https://form.jotformz.com/81508399847675).
 
 
 ==============================================
