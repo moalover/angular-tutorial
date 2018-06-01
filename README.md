@@ -458,15 +458,16 @@ export class ListadoDeHeroesComponent implements OnInit {
 Lo que sigue es agregar el campo de texto al template en `src/app/listado-de-heroes/listado-de-heroes.component.html`:
 
 ```
-<h1 class="text-center">{{title}}</h1>
-<div class="container">
-  <div class="row">
-    <form (ngSubmit)="submitSearch()">
-      <div class="form-group col-xs-12">
-        <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
-      </div>
-    </form>
+....
+
+<form (ngSubmit)="submitSearch()">
+  <div class="form-group col-xs-12">
+    <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
+  </div>
+</form>
+
   ...
+  
 ```
 
 Para resolver el error que la aplicación arroja en este momento, es necesario editar el módulo principal, en `src/app/app.module.ts` agregando el módulo _FormsModule_:
