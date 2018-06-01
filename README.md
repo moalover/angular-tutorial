@@ -459,14 +459,13 @@ Lo que sigue es agregar el campo de texto al template en `src/app/listado-de-her
 
 ```
 <h1 class="text-center">{{title}}</h1>
-<div class="row">
-
-
-  <form (ngSubmit)="submitSearch()">
-    <div class="form-group col-xs-12">
-      <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
-    </div>
-  </form>
+<div class="container">
+  <div class="row">
+    <form (ngSubmit)="submitSearch()">
+      <div class="form-group col-xs-12">
+        <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control" id="search" placeholder="Búsqueda de super-héroe">
+      </div>
+    </form>
   ...
 ```
 
