@@ -57,7 +57,7 @@ Para generar un nuevo esqueleto de aplicación (una aplicación mínima) ideal p
 Supóngase que queremos crear un nuevo proyecto llamado *"BechMarvel"*:
 
 ```
-> ng new BechMarvel -routing
+> ng new AccentureMarvel --routing --prefix="accen"
 ```
 
 Pero, ¿que está pasando cuando ejecutamos este comando?:
@@ -111,7 +111,7 @@ Si inspeccionamos al archivo `src/app/listado-de-heroes/listado-de-heroes.compon
 
 ```
 @Component({
-  selector: 'app-listado-de-heroes',
+  selector: 'accen-listado-de-heroes',
   ...
 })
 export class ListadoDeHeroesComponent implements OnInit {
@@ -122,14 +122,14 @@ Aquí vale la pena darle especial atención a la propiedad *"selector"* que cont
 Lo veremos con un ejemplo, vamos a editar el template (HTML) de nuestro componente principal que se encuentra en `src/app/app.component.html`, de forma que se vea así:
 
 ```
-<app-listado-de-heroes></app-listado-de-heroes>
+<accen-listado-de-heroes></accen-listado-de-heroes>
 ```
 
 Dese cuenta que es el mismo selector que definimos anteriormente. Ahora revisemos la aplicación para ver que ha pasado.
 
 ## 5 - Agreguemos una ruta a nuestro componente ListadoDeHeroes
 
-Existe otro método para incluir componentes en nuestra aplicación, asociándolo a una _ruta_ o _URL_, y para esto vamos a utilizar el módulo de enrutamienta que nos creó el Angular CLI en `src/app/app-routing.module.ts`. Si abrimos el archivo con un editor de texto podremos ver algo similiar a:
+Existe otro método para incluir componentes en nuestra aplicación, asociándolo a una _ruta_ o _URL_, y para esto vamos a utilizar el módulo de enrutamienta que nos creó el Angular CLI en `src/app/accen-routing.module.ts`. Si abrimos el archivo con un editor de texto podremos ver algo similiar a:
 
 ```
 import { NgModule } from '@angular/core';
@@ -154,7 +154,7 @@ El arreglo `routes` (que por los momenos está vacío) es una lista de rutas, es
 }
 ```
 
-De forma que para acceder a nuestro componente *ListadoDeHeroes* mediante una ruta o URL, agreguemos la siguiente entrada al arreglo *routes* en `src/app/app-routing.module.ts`:
+De forma que para acceder a nuestro componente *ListadoDeHeroes* mediante una ruta o URL, agreguemos la siguiente entrada al arreglo *routes* en `src/app/accen-routing.module.ts`:
 
 ```
 import { ListadoDeHeroesComponent } from './listado-de-heroes/listado-de-heroes.component';
@@ -174,7 +174,7 @@ Ahora solo debemos indicar en dónde se va a ver el componente cuando el usuario
 
 Vayamos en nuestro navegador a `https://localhost:4200/listado-heroes` y veamos que pasa.
 
-Para finalizar queda definir una ruta por defecto, en caso de que el usuario navegue a una ruta que no hayamos definido anteriormente, para esto editamos de nuevo nuestro arreglo *routes* en `src/app/app-routing.module.ts`:
+Para finalizar queda definir una ruta por defecto, en caso de que el usuario navegue a una ruta que no hayamos definido anteriormente, para esto editamos de nuevo nuestro arreglo *routes* en `src/app/accen-routing.module.ts`:
 
 ```
 const routes: Routes = [
@@ -545,7 +545,7 @@ Finalmente nuestra aplicación tiene lo esencial para consultar y listar héroes
 > ng g component HeroProfile
 ```
 
-De igual forma vamos a agregar una ruta en nuestro módulo enrutador que envíe al usuario al nuevo componente, para esto editamos `src/app/app-routing.module.ts`:
+De igual forma vamos a agregar una ruta en nuestro módulo enrutador que envíe al usuario al nuevo componente, para esto editamos `src/app/accen-routing.module.ts`:
 
 ```
 import { HeroProfileComponent } from './hero-profile/hero-profile.component';
@@ -691,7 +691,7 @@ Llenaremos la clase del componente recién creada con los siguientes imports que
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-  selector: 'app-modal-poll',
+  selector: 'accen-modal-poll',
   templateUrl: './modal-poll.component.html',
   styleUrls: ['./modal-poll.component.css']
 })
@@ -765,7 +765,7 @@ Para poder comprobar que nuestro modal funciona, vamos a asociarle un url para a
 ```
   public show_modal: boolean = true;
 ```
-Luego, la ruta la agregamos en `src/app/app-routing.module.ts` de esta forma: 
+Luego, la ruta la agregamos en `src/app/accen-routing.module.ts` de esta forma: 
 ```
 ....
 import { ModalPollComponent } from './modal-poll/modal-poll.component';
@@ -797,13 +797,13 @@ public question_modal: string;
 ```
 Adicionalmente, debemos agregar el selector html o tag html que identifica al componente hijo dentro del componente padre, así como también, el atributo que deseamos llenar desde el componente padre *title_modal* es el nombre con el que se definió el atributo en el componente hijo, mientras que question_modal es el nombre con el que se declaró en el componente padre. Por tanto, en el archivo `src/app/hero-profile/hero-profile.component.html` agregamos lo siguiente:
 ```
-<app-modal-poll [title_modal]="question_modal"></app-modal-poll>
+<accen-modal-poll [title_modal]="question_modal"></accen-modal-poll>
 ```
 
 Ya tenemos listas las asociaciones, pero nos hace falta un evento para disparar o invocar al componente del modal. Para ello, primero definimos una variable de template local sobre el tag html del componente hijo, en el archivo `src/app/hero-profile/hero-profile.component.html`, de esta forma: 
 
 ```
-<app-modal-poll [title_modal]="question_modal" #modal></app-modal-poll>
+<accen-modal-poll [title_modal]="question_modal" #modal></accen-modal-poll>
 ```
 Y en el archivo `src/app/hero-profile/hero-profile.component.ts`, declaramos lo siguiente: 
 ```
@@ -950,10 +950,10 @@ Y luego en el html del componente padre o hero-profile(`src/app/hero-profile/her
 ```
 Lo cual nos quedaría en:
 ```
-<app-modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" [team_selected]="team" #modal></app-modal-poll>
+<accen-modal-poll (setTeam)="getTeam($event)" [title_modal]="question_modal" [team_selected]="team" #modal></accen-modal-poll>
 ```
 
-Finalmente, en la interfaz del componente hijo (app-modal-poll), nos valemos de la directiva ngClass, para establecer una lógica que permita agregar una clase selected al div que haya sido seleccionado, agregando en cada botón la siguiente propiedad, con su color correspondiente:
+Finalmente, en la interfaz del componente hijo (accen-modal-poll), nos valemos de la directiva ngClass, para establecer una lógica que permita agregar una clase selected al div que haya sido seleccionado, agregando en cada botón la siguiente propiedad, con su color correspondiente:
 ```
 [ngClass]="{'selected': team_selected=='azul'}"
 ```
