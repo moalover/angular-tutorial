@@ -948,7 +948,7 @@ Nos dirigimos al tag *anchor*, que contiene el id y thumbnail de la foto del hé
 [style.border-color]="heroesService['group_colors'][heroe.teamColor]" 
 ```
 
-Por último, vamos a comprobar si se agregó bien el equipo al superheroe. Deben ocurrir dos cosas:
+En este punto deben ocurrir dos cosas:
 - Al ingresar al componente *heroe-profile*, debe indicar el equipo al cual ya pertenece el héroe.
 - Al ingresar al componente modal-poll, se debe marcar la selección realizada previamente.
 
@@ -962,7 +962,7 @@ variable team del componente, que inicialmente la inicializamos en "".
 this.team = this.heroe.teamColor;
 ```
 
-Lo segundo se logra mandándole el team seleccionado que se guardó en la variable team del componente `src/app/hero-profile/hero-profile.component.ts`, al componente del modal a través de una variable con decorador @Input, que permitirá instanciar la variable team_selected del componente modal desde el componente padre que es heroes-profile. Por tanto primero definimos la variable en el componente modal(`src/app/modal-poll/modal-poll.component.ts`), haciendo:
+Lo segundo se logra mandándole el team seleccionado desde el componente de heroe-profile al componente modal. Para ello, debemos crear otro atributo en la clase `src/app/modal-poll/modal-poll.component.ts` con decorador @Input, haciendo:
 ```
 @Input() public team_selected : string;
 ```
