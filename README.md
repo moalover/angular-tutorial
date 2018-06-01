@@ -72,7 +72,7 @@ Pero, ¿que está pasando cuando ejecutamos este comando?:
 
 Para continuar, nos dirigiremos al directorio recién creado dónde se creo la aplicación, para ello, en el terminal hacemos:
 ```
->  cd BechMarvel
+>  cd AccentureMarvel
 ```
 
 La forma más sencilla de ejecutar una aplicación para hacer pruebas y desarrollar nuevas funcionalidades es mediante el siguiente comando:
