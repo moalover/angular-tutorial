@@ -846,7 +846,9 @@ Y las siguientes líneas de código en `src/app/hero-profile/hero-profile.compon
 
 ### 14.2 - Mandando información desde un componente hijo a su componente padre
 
-Ahora queremos la comunicación del lado inverso, **queremos que el componente hijo le envíe información al componente padre**. La información que enviaremos será la elección del equipo elegido para un superhéroe en cuestión, para que se muestre en el profile del mismo. Para realizar esto, ocuparemos la clase *EventEmitter*, que permite enviar eventos entre componentes. El primer paso para realizar esto es crear en `src/app/modal-poll/modal-poll.component.ts` una variable que nos permita guardar el evento que vamos a crear y que posteriormente enviaremos, además esta variable debe contener el decorador Output que le indicará al componente que es una variable que se compartirá con otro componente:
+Ahora queremos la comunicación del lado inverso, **queremos que el componente hijo le envíe información al componente padre**. La información que enviaremos será la elección del equipo elegido para un superhéroe en cuestión, para que se muestre en el profile del mismo. Para realizar esto, ocuparemos la clase *EventEmitter*, que permite enviar eventos entre componentes. 
+
+El primer paso para realizar esto es crear en `src/app/modal-poll/modal-poll.component.ts` una variable que nos permita enviar el string asociado al color del equipo empaquetado en un evento. Le debe anteceder el decorador Output que indica que es un emisor de eventos (EventEmitter)
 ```
 ...
 
