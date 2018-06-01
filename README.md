@@ -212,7 +212,7 @@ Vamos a editar el template de nuestro componente ListadoDeHeroes, en `src/app/li
 Vamos a instalar el paquete de bootstrap mediante _npm_:
 
 ```
-> npm install --save bootstrap
+> npm install --save bootstrap@3.3.7
 ```
 
 Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_modules/bootstrap/dist/css/bootstrap.min.css`, ahora solo tenemos que configurar Angular CLI para que incluya este archivo de forma automática en nuestra aplicación, para esto editamos el archivo `angular.json` (Para Angular 2 a 5 llamado .angular-cli.json) en la raiz de nuestra aplicación:
@@ -220,8 +220,8 @@ Esto nos va a descargar el estilo de Bootstrap 3 en la siguiente ruta `../node_m
 ```
 …
 "styles": [
-  "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-  "styles.css"
+  "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "src/styles.css"
 ],
 …
 ```
